@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'mysql:dbname=sistem40_quimur;host=127.0.0.1',
+	'dsn'	=> 'mysql:dbname=legal;host=127.0.0.1',
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
