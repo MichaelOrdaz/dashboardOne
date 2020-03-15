@@ -38,7 +38,7 @@
           <div class="sign-wrapper mg-lg-l-50 mg-xl-l-60">
             <div class="wd-100p">
               <h3 class="text-muted mg-b-5 text-center">Entrar al Sistema</h3>
-
+              
               <div class="row">
                 <div class="col text-center">
                   <img src="<?= base_url('public/images/logo.png')?>" alt="Logo LegalSolutions" class="img-fluid">
@@ -50,20 +50,37 @@
 
                 <div class="form-group">
                   <label> Nombre de Usuario </label>
-                  <input type="username" name="username" class="form-control" placeholder="yourname@yourmail.com" >
+                  <input type="username" name="username" class="form-control" placeholder="yourname@yourmail.com" value="<?=set_value('username')?>" >
                 </div>
                 <div class="form-group">
                   <div class="d-flex justify-content-between mg-b-5">
                     <label class="mg-b-0-f">Contraseña</label>
-                    <a href="<?= current_url() ?>" class="tx-13">¿Olvidaste la Contraseña?</a>
                   </div>
-                  <input type="password" name="pass" class="form-control" placeholder="Ingresa tu Contraseña">
+                  <input type="password" name="pass" class="form-control" value="" placeholder="Ingresa tu Contraseña">
                 </div>
                 <button class="btn btn-success btn-block" type="submit">Entrar</button>
 
               </form>
-              
+
               <div class="row">
+                <div class="col">
+                    <a href="<?= current_url() ?>" class="tx-13">¿Olvidaste la Contraseña?</a>
+                </div>
+              </div>
+              
+              <div class="row mt-1">
+                <div class="col">
+                  <div class="alert alert-<?= @$type ?> <?= empty($msg) ? 'd-none' : '' ?>">
+                    <?= $msg ?>
+
+                    <?php 
+                    //var_dump($user); 
+                    ?>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-1">
                 <div class="col">
                   <?= validation_errors('<div class="alert alert-danger">','</div>') ?>
                 </div>

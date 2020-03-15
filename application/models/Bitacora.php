@@ -1,7 +1,4 @@
 <?php
-/**
- * 
- */
 class Bitacora extends CI_Model
 {
   
