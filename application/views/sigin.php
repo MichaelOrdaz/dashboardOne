@@ -70,13 +70,11 @@
               
               <div class="row mt-1">
                 <div class="col">
-                  <div class="alert alert-<?= @$type ?> <?= empty($msg) ? 'd-none' : '' ?>">
-                    <?= $msg ?>
+                  <?php
+                    $attr['class'] = ( empty($status) ? 'alert alert-danger' : ( $status === 1 ? 'alert alert-success' : 'alert alert-danger' ) );
+                    echo wrapper_message( $msg ?? '', 'div', $attr );
+                  ?>
 
-                    <?php 
-                    //var_dump($user); 
-                    ?>
-                  </div>
                 </div>
               </div>
 

@@ -2,7 +2,7 @@
 $(function(){
   'use strict'
 
-  feather.replace();
+  // feather.replace();
 
   ////////// NAVBAR //////////
 

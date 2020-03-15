@@ -8,6 +8,8 @@ class Login extends CI_Controller {
     $this->load->helper('form');
     $this->load->library('form_validation');
 
+    $this->load->helper('custom');//cargo mis ayudantes
+
   }
 
   public function index()
@@ -48,17 +50,19 @@ class Login extends CI_Controller {
       $user = $this->Usuario->getUser(['username'=> $username]);
       
       if( $user !== FALSE ){
-        // redirect("/mgr/main");
+        
         if( $user->verifyPass($pass) ){
-          $this->load->view('sigin', ['msg'=> 'Correcto', 'user'=> $user, 'type'=> 'success']);
+          header('refresh:4;url='.base_url('/mgr/main'));
+          $this->load->view('sigin', ['msg'=> 'Correcto sera redirigido en un momento <i class="fas fa-spinner fa-pulse"></i>', 'status'=> 1]);
+          // redirect("/mgr/main");
         }
         else{
-          $this->load->view('sigin', ['msg'=> 'Las contraseña es incorrecta', 'user'=>$user, 'type'=> 'danger' ]);
+          $this->load->view('sigin', ['msg'=> 'Las credenciales son incorrectas', 'status'=> 0 ]);
         }
         
       }
       else{
-        $this->load->view('sigin', ['msg'=> 'Las credenciales son incorrectas', 'user'=>$user, 'type'=> 'danger' ]);
+        $this->load->view('sigin', ['msg'=> 'Las credenciales son invalidas', 'status'=> 0 ]);
       }
 
     }
