@@ -99,5 +99,22 @@ class Login extends CI_Controller {
 
   }
 
+  public function logout(){
+
+    // $_SESSION = array();
+    // session_destroy();
+    unset(
+      $_SESSION['dash_nombre'],
+      $_SESSION['dash_paterno'],
+      $_SESSION['dash_materno'],
+      $_SESSION['dash_username'],
+      $_SESSION['dash_roles'],
+      $_SESSION['dash_email']
+    );
+
+    echo json_encode(['status'=> 1, 'La sesión se cerrará']);
+
+  }
+
 
 }

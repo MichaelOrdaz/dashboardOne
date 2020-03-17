@@ -14,11 +14,18 @@ class Migrate extends CI_Controller
     $migration_actual = '';
 
     $result = $this->db->get('migrations');
+    // var_dump($result);
+    // var_dump($this->db->affected_rows());
     if( $this->db->affected_rows() > 0 ){
 
       $current = $result->row()->version;
-      $fecha = DateTime::createFromFormat('YmdHis', $current);
-      $migration_actual = "Versión {$fecha->format('l Y-F-d h:i:s a')}";
+      if( $current == '0' ){
+        $migration_actual = 'No se ha establecido ninguna migración';
+      }
+      else{
+        $fecha = DateTime::createFromFormat('YmdHis', $current);
+        $migration_actual = "Versión {$fecha->format('l Y-F-d h:i:s a')}";
+      }
     
     }
     else{

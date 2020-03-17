@@ -50,13 +50,13 @@
 
                 <div class="form-group">
                   <label> Nombre de Usuario </label>
-                  <input type="username" name="username" class="form-control" placeholder="yourname@yourmail.com" value="<?=set_value('username')?>" >
+                  <input type="username" name="username" class="form-control" required placeholder="yourname@yourmail.com" value="<?=set_value('username')?>" >
                 </div>
                 <div class="form-group">
                   <div class="d-flex justify-content-between mg-b-5">
                     <label class="mg-b-0-f">Contraseña</label>
                   </div>
-                  <input type="password" name="pass" class="form-control" value="" placeholder="Ingresa tu Contraseña">
+                  <input type="password" name="pass" class="form-control" value="" required placeholder="Ingresa tu Contraseña">
                 </div>
                 <button class="btn btn-success btn-block" type="submit">Entrar</button>
 

@@ -66,6 +66,7 @@ class User {
     $this->CI->session->dash_paterno = $this->paterno;
     $this->CI->session->dash_materno = $this->materno;
     $this->CI->session->dash_roles = $this->roles;
+    $this->CI->session->dash_email = $this->correo;
   }
 
   /**
