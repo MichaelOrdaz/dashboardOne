@@ -10,7 +10,7 @@
     <meta name="description" content="Dashboard Legal solutions">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="../../assets/img/favicon.png">
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="../../assets/img/favicon.png"> -->
 
     <title>Login::LegalSolutions</title>
 

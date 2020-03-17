@@ -10,8 +10,33 @@ class Main extends CI_Controller {
 
 
   public function index(){
-    // $this->load->view('');
-    echo "Hola desde el admin";
+
+    $dataHeader = [
+      'title'=> 'Home',
+      'stylesheets' => [],
+    ];
+    $header = $this->load->view('base/header.php' , $dataHeader, TRUE);
+
+    $dataAside = [
+      'home'=> 'active',
+    ];
+    $aside = $this->load->view('base/aside.php' , $dataAside, TRUE);
+
+    $dataContent = [
+      'breadcrumbMain'=> 'Dashboard',
+      'breadcrumbSecondary'=> 'Resumen',
+    ];
+    $content = $this->load->view('mgr/home.php' , $dataContent, TRUE);
+
+    $dataFooter = [
+      'scripts'=> [
+        'public/assets/js/dashforge.sampledata.js',
+        'public/mgr/home.js',
+      ]
+    ];
+    $footer = $this->load->view('base/footer.php' , $dataFooter, TRUE);
+
+    echo $header.$aside.$content.$footer;
 
   }
 
