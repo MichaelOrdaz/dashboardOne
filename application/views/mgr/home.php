@@ -54,45 +54,6 @@
 
 </div>
 
-<div class="row my-1">
-  
-  <div class="col">
-
-    <div class="card">
-      <div class="card-body">
-        
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nombre(s)</th>
-              <th>Paterno</th>
-              <th>Materno</th>
-              <th>Correo</th>
-              <th>Empresa</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($usuarios as $usr): ?>
-              <tr>
-                <td> <?= $usr->idUser ?> </td>
-                <td> <?= $usr->nombreUser ?> </td>
-                <td> <?= $usr->paternoUser ?> </td>
-                <td> <?= $usr->maternoUser ?> </td>
-                <td> <?= $usr->emailUser ?> </td>
-                <td> <?= $usr->empresaUser ?> </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-
-      </div>
-    </div>
-    
-
-  </div>
-
-</div>
 
 <div class="row">
 

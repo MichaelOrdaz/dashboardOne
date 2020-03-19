@@ -30,9 +30,48 @@
       </div>
     </div><!-- aside-loggedin -->
     <ul class="nav nav-aside">
+      
       <li class="nav-label">Dashboard</li>
-      <li class="nav-item <?= $home ?? '' ?>"><a href="dashboard-one.html" class="nav-link"><i data-feather="pie-chart"></i> <span>Resumen</span></a></li>
-      <li class="nav-item <?= $otherModule ?? '' ?>"><a href="dashboard-two.html" class="nav-link"><i data-feather="globe"></i> <span>Other Module</span></a></li>
+      
+      <li class="nav-item <?= $home ?? '' ?>">
+        <a href="<?= base_url('mgr/main') ?>" class="nav-link"><i data-feather="pie-chart"></i> <span>Resumen</span></a>
+      </li>
+
+
+      <!-- <li class="nav-item <?= $otherModule ?? '' ?>">
+        <a href="dashboard-two.html" class="nav-link"><i data-feather="globe"></i> <span>Other Module</span></a>
+      </li> -->
+
+      <li class="nav-item with-sub <?= $adminSistemas ?? '' ?>">
+        <a href="" class="nav-link"> <i data-feather="list"></i> <span>Admin Sistema</span> </a>
+        <ul>
+          <li><a href="<?= base_url('mgr/gestion/usuarios') ?>"> </i> Usuarios</a></li>
+          <li><a href="<?= base_url('mgr/gestion/instancias') ?>"> </i> Instancias</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item with-sub <?= $instanciasLink ?? '' ?>">
+        <a href="" class="nav-link"> <i data-feather="terminal"></i> <span>Instancias</span> </a>
+        <ul>
+          
+          <?php
+            if( empty( $instancias ) ){
+              echo "<li><a href='javascript://' > No hay instancias </a></li>";
+            }
+            else{
+              foreach ($instancias as $instancia) {
+                // $segmentIp = explode('.', $instancia->host);
+                  // <a href='".base_url('mgr/instancia/index/'. end( $segmentIp ) )."' > {$instancia->host} </a>
+                echo "<li>
+                  <a href='".base_url('mgr/instancia/index/'.$instancia->id)."' > {$instancia->host} </a>
+                </li>";
+                
+              }
+            }
+          ?>
+
+        </ul>
+      </li>
 
 
     </ul>

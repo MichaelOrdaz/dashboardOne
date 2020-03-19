@@ -13,9 +13,9 @@
 <?php 
 //aqui mando una variable de mas estilos
 if( ! empty( $scripts ) ){
-foreach( $scripts as $js ){
-echo "<script src='".base_url($js)."'></script>";
-}
+  foreach( $scripts as $js ){
+    echo "<script src='".base_url($js)."'></script>";
+  }
 }
 ?>
 

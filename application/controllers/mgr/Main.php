@@ -5,9 +5,11 @@ class Main extends CI_Controller {
 
   public function __construct(){
     parent::__construct();
+    $this->load->library('markup');
 
-    $this->load->model('instancias/Instancia_103');
   }
+
+
 
   public function index(){
 
@@ -17,12 +19,7 @@ class Main extends CI_Controller {
       // }
     }
 
-
-    $usuarios = $this->Instancia_103->getUsers();
-
-    $content = $this->load->view('mgr/home.php' , [
-      'usuarios'=> $usuarios,
-    ], TRUE);
+    $content = $this->load->view('mgr/home.php', NULL, TRUE);
 
     $data = [
       'header'=> ['title'=> 'Home'],
@@ -36,9 +33,6 @@ class Main extends CI_Controller {
           'public/lib/jquery.flot/jquery.flot.resize.js',
         ]
       ],
-      'content'=> [
-        'usuarios'=> $usuarios,
-      ],
       'nav'=> [
         'breadcrumbMain'=> 'Dashboard',
         'breadcrumbSecondary'=> 'Resumen',
@@ -47,26 +41,11 @@ class Main extends CI_Controller {
     ];
 
     
-    $this->loadView($data);
+    $this->markup->laucherView($data);
 
   }
 
 
-  protected function loadView( array $data ){
-
-    $header = $this->load->view('base/header.php' , $data['header'], TRUE);
-
-    $aside = $this->load->view('base/aside.php' , $data['aside'], TRUE);
-
-    $footer = $this->load->view('base/footer.php' , $data['footer'], TRUE);
-    
-    $data['nav']['body'] = $data['body'];
-    $nav = $this->load->view('base/nav.php', $data['nav'], TRUE);
-
-    $this->load->view('base/layout', compact('header', 'aside', 'nav', 'footer') );
-
- 
-  }
 
 
 }
