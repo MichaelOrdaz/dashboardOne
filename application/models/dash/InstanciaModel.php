@@ -5,7 +5,7 @@
  */
 class InstanciaModel extends CI_Model{
   
-  private $DB = null;
+  private $DB = FALSE;
 
   private $id;
   public $host;
@@ -28,7 +28,7 @@ class InstanciaModel extends CI_Model{
     $r = $this->db->get_where('instancias', ['id'=> $id], 1);
 
     if( ! $this->db->affected_rows() > 0 ){
-      //la instancia no fue valida y no se obtivieron datos
+      //la instancia no fue valida y no se obtuvieron datos
       return false;
     }
 
@@ -38,7 +38,7 @@ class InstanciaModel extends CI_Model{
       $this->{$key} = $value;
     }
     
-    $this->DB = $this->load->database([
+    $this->config = [
       'hostname'=> $this->host,
       'username'=> $this->user,
       'password'=> $this->password,
@@ -46,7 +46,7 @@ class InstanciaModel extends CI_Model{
       'dbdriver'=> 'mysqli',
       'dbprefix' => '',
       'pconnect' => FALSE,
-      'db_debug' => (ENVIRONMENT !== 'production'),
+      'db_debug' => FALSE,
       'cache_on' => FALSE,
       'cachedir' => '',
       'char_set' => 'utf8',
@@ -57,16 +57,54 @@ class InstanciaModel extends CI_Model{
       'stricton' => FALSE,
       'failover' => array(),
       'save_queries' => TRUE
-    ], TRUE, TRUE);
+    ];
+
+    // echo "antes del load database";
+
+    $this->DB = $this->load->database($this->config, TRUE, TRUE);
+
+    // var_dump("Esto regresa el load database", $this->DB);
 
     return $this->DB;//lo regreso para que se regrese algo
+    //este puede ser la instancia de db o false en caso de error
+    //aqui estoy mal por que regresa la conexion del driver igual lo dejo, pero lo ignoro
   
   }
 
-  public function get(){
+  /**
+   * [getConnection devuelve la conexion a la base de datos de la intancia, con query builder activo]
+   * @return [mixed] [devuelve la conexion de db o false en caso de error con la conexion]
+   */
+  public function getConnection(){
     return $this->DB;
   }
 
+  public function getInstancia( array $where ){
+    $r = $this->db->get_where('instancias', $where 1);
+
+    if( ! $this->db->affected_rows() > 0 ){
+      return false;
+    }
+
+  }
+
+  /**
+   * [create crea un registro de conexion de una instancia]
+   * @param  [array] $datos [description]
+   * @return [mixed] objeto si se almaceno correctamente o false
+   */
+  public function create( array $datos ){
+
+    $datos['acciones'] = "creador {$this->session->userdata('dash_user')} fecha " . date('Y-m-d H:i:s') . " ip {$this->input->ip_address()},"; 
+
+    if( $this->db->insert('instancias', $datos) ){
+      $id = $this->db->insert_id();
+      return $id;
+      // return $this->set( $id );
+    }
+    else
+      return FALSE;
+  }
 
   public function getCountUsers(){
 

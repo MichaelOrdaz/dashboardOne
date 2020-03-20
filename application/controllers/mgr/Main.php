@@ -7,17 +7,16 @@ class Main extends CI_Controller {
     parent::__construct();
     $this->load->library('markup');
 
-  }
-
-
-
-  public function index(){
-
     if( ( $role = $this->session->userdata('dash_roles') ) === NULL ){
       // if( in_array('ROLE_USER', $role) ){
         redirect( base_url('login') );
       // }
     }
+    
+  }
+
+  public function index(){
+
 
     $content = $this->load->view('mgr/home.php', NULL, TRUE);
 

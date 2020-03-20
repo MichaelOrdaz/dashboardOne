@@ -30,8 +30,8 @@ class Migration_acciones extends CI_Migration {
 
   public function down()
   {
-    $this->dbforge->drop_columns('instacias', 'acciones');
-    $this->dbforge->drop_columns('usuarios', 'acciones');
+    $this->dbforge->drop_column('instancias', 'acciones');
+    $this->dbforge->drop_column('usuarios', 'acciones');
   }
 
 }

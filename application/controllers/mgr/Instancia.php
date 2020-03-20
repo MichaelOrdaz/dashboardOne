@@ -9,18 +9,17 @@ class Instancia extends CI_Controller {
     $this->load->model('dash/InstanciaModel', 'host');
     $this->load->library('markup');
 
-  }
-
-  public function index( $instancia = null ){
-
     if( ( $role = $this->session->userdata('dash_roles') ) === NULL ){
       // if( in_array('ROLE_USER', $role) ){
         redirect( base_url('login') );
       // }
     }
+  }
+
+  public function index( $instancia = null ){
+
 
     $error = '';
-
 
     try{
 

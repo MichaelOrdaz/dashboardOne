@@ -65,3 +65,37 @@ if ( ! function_exists('wrapper_message'))
 
   }
 }
+
+if ( ! function_exists('connection_native') ){
+
+  function connection_native( $host, $user, $pass, $dbname ){
+
+    /* Conectar a una base de datos de MySQL invocando al controlador */
+    $dsn = "mysql:host={$host};dbname={$dbname}";
+    $usuario = $user;
+    $contraseña = $pass;
+
+    try {
+      $gbd = new PDO($dsn, $usuario, $contraseña);
+      $attributes = array(
+        "AUTOCOMMIT", "ERRMODE", "CASE", "CLIENT_VERSION", "CONNECTION_STATUS",
+        "ORACLE_NULLS", "PERSISTENT", "PREFETCH", "SERVER_INFO", "SERVER_VERSION",
+        "TIMEOUT"
+      );
+
+      $connectionAttribute = [];
+      foreach ($attributes as $val) {
+        $connectionAttribute["PDO::ATTR_$val:"] = $gbd->getAttribute(constant("PDO::ATTR_$val"));
+      }
+      return $connectionAttribute;
+    }
+    catch (PDOException $e) {
+      return $e->getMessage();
+    }
+
+  }
+
+
+}
+
+

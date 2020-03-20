@@ -5,7 +5,7 @@
   
   <div class="col">
     <div class="card">
-      <div class="card-body text-right">
+      <div class="card-body text-right p-1">
         <a href="<?= base_url('mgr/gestion/usuarios/add') ?>" class="btn btn-success"> <i class="fa fa-user"></i> Agregar usuario </a>
         <!-- <a href="<?= current_url() . '/add' ?>" class="btn btn-success"> <i class="fa fa-user"></i> Agregar usuario </a> -->
       </div>

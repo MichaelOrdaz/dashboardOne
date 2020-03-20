@@ -35,8 +35,7 @@ class Gestion extends CI_Controller {
           $vista = 'mgr/usuarios.php';
 
           $links = [
-            "public/lib/datatables.net-dt/css/jquery.dataTables.min.css",
-            "public/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css",
+            // "public/lib/datatables.net-dt/css/jquery.dataTables.min.css",
           ];
 
           $scripts = [
@@ -51,10 +50,31 @@ class Gestion extends CI_Controller {
           $this->load->helper('form');
           $this->load->library('form_validation');
           
+          $rules = [];
+
           if( $accion === 'add' ){
 
             $title = 'Crear usuario';
             $breadcrumbSecondary = 'Crear';
+
+            $rules = array_merge($rules, [
+              [
+                'field'=> 'correo',
+                'label'=> 'Correo Electrónico',
+                'rules'=> 'required|is_unique[usuarios.correo]|valid_email',
+                'errors'=> [
+                  'is_unique'=> 'El correo %s ya esta en uso',
+                ]
+              ],
+              [
+                'field'=> 'username',
+                'label'=> 'Nombre de Usuario',
+                'rules'=> 'required|is_unique[usuarios.username]',
+                'errors'=> [
+                  'is_unique'=> 'El nombre de usuario %s ya esta en uso',
+                ]
+              ],
+            ] );
 
           }
           else if( $accion === 'update' ){
@@ -66,19 +86,11 @@ class Gestion extends CI_Controller {
 
           //validar información
           //id, nombre, paterno, materno, roles, correo, username, genero, pass, direccion, telefono, celular, created_at, updated_at, acciones, status
-          $rules = [
+          $rules = array_merge( [
             [
               'field'=> 'nombre',
               'label'=> 'Nombre',
               'rules'=> 'required',
-            ],
-            [
-              'field'=> 'correo',
-              'label'=> 'Correo Electrónico',
-              'rules'=> 'required|is_unique[usuarios.correo]|valid_email',
-              'errors'=> [
-                'is_unique'=> 'El correo %s ya esta en uso',
-              ]
             ],
             [
               'field'=> 'paterno',
@@ -99,14 +111,6 @@ class Gestion extends CI_Controller {
               ],
             ],
             [
-              'field'=> 'username',
-              'label'=> 'Nombre de Usuario',
-              'rules'=> 'required|is_unique[usuarios.username]',
-              'errors'=> [
-                'is_unique'=> 'El nombre de usuario %s ya esta en uso',
-              ]
-            ],
-            [
               'field'=> 'genero',
               'label'=> 'Género',
               'rules'=> 'required',
@@ -121,7 +125,7 @@ class Gestion extends CI_Controller {
               'label'=> 'Celular',
               'rules'=> 'numeric',
             ]
-          ];
+          ] );
 
           $this->form_validation->set_rules( $rules );
 
@@ -148,7 +152,6 @@ class Gestion extends CI_Controller {
 
               $vista = 'mgr/successUser.php';
               $dataView['subTitle'] = 'Usuario creado';
-              $dataView['parrafo'] = "El usuario <b>{$this->input->post('username')}</b>, {$this->input->post('nombre')} {$this->input->post('paterno')} {$this->input->post('materno')} se creo correctamente <br> Importante, la contraseña es {$passUser}";
 
 
               //recuperamos datos
@@ -171,6 +174,7 @@ class Gestion extends CI_Controller {
               }
 
               $dataView['passUser'] = $pass;
+              $dataView['parrafo'] = "El usuario <b>{$this->input->post('username')}</b>, {$this->input->post('nombre')} {$this->input->post('paterno')} {$this->input->post('materno')} se creo correctamente <br> Importante, la contraseña es {$pass}";
             
             }//endifAdd
             else if( $accion === 'update' ){
@@ -273,12 +277,13 @@ class Gestion extends CI_Controller {
       $response = ['status'=> 0, 'msg'=> 'Error'];
     }
 
-    $this->output
-      ->set_status_header(200)
-      ->set_content_type('application/json', 'utf-8')
-      ->set_output( json_encode( $response ) )
-      ->_display();
-    exit;
+    echo json_encode($response);
+    // $this->output
+    //   ->set_status_header(200)
+    //   ->set_content_type('application/json', 'utf-8')
+    //   ->set_output( json_encode( $response ) )
+    //   ->_display();
+    // exit;
 
   }
 
@@ -300,9 +305,197 @@ class Gestion extends CI_Controller {
         $response = ['status'=> 0, 'msg'=> 'No se pudo obtener el usuario'];
       }
     }
-
     echo json_encode( $response );
+  }
 
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  //gestion de las instancias la hare de otra forma para mejor legibilidad //
+  ///////////////////////////////////////////////////////////////////////////
+  
+  /**
+   * esta funcion gestionara las peticiones que se realicen para la administracion de las instancias, 
+   * el CRUD.
+   * @param  [string] $action [la accion a realizar con la instancia(s)]
+   * @param  [?int] $idHost [el identificador de la instancia]
+   * @return [void] 
+   */
+  public function instancias(string $action = 'list', $idHost = '' ): void {
+
+    try{
+    
+      if( $action === 'list' ){
+
+        $this->obtenerInstancias();
+
+      }
+      else if( $action === 'add' ){
+
+        $this->createInstancia();
+
+      }
+      else if( $action === 'update' ){
+
+      }
+      else if( $action === 'delete' ){
+
+      }
+
+    }
+    catch( Exception $e ){
+      
+      $this->markup->laucherView([
+      'header'=> ['title' => 'Error'],
+      'nav'=> ['breadcrumbMain'=> 'Sistema', 'breadcrumbSecondary'=> 'error'],
+      'body'=> $this->load->view('error', ['error'=> $e], TRUE),
+      ]);
+
+    }
+
+  }
+
+  protected function getRulesForm( string $form ): array {
+    $rules = [];
+
+    switch ( $form ) {
+      case 'createInstancia': case 'updateInstancia':
+
+        $rules = array_merge($rules, [
+          [
+            'field'=> 'nombre',
+            'label'=> 'Nombre',
+            'rules'=> 'required',
+          ],
+          [
+            'field'=> 'host',
+            'label'=> 'Hostname',
+            'rules'=> 'required',
+          ],
+          [
+            'field'=> 'user',
+            'label'=> 'Usuario',
+            'rules'=> 'required',
+          ],
+          [
+            'field'=> 'dbname',
+            'label'=> 'Base de Datos',
+            'rules'=> 'required'
+          ],
+        ]);
+
+      break;
+
+      default:
+        //statements
+      break;
+    }
+
+    return $rules;
+  }
+
+  protected function createInstancia(){
+
+    $this->load->helper('form');
+    $this->load->library('form_validation');
+
+    $breadcrumbMain = 'Instancias';
+    $breadcrumbSecondary = 'Crear';
+
+    $rules = $this->getRulesForm('createInstancia');
+
+    $this->form_validation->set_rules( $rules );
+
+    if ( $this->form_validation->run() === FALSE ){
+
+      $dataView['title'] = 'Agregar Instancia';
+      $dataView['titleForm'] = 'Alta de Instancias en el sistema';
+      
+      $content = $this->load->view('mgr/formInstancia' , $dataView, TRUE);
+    
+    }
+    else{
+
+      $this->load->model('dash/InstanciaModel', 'dbhost');
+
+      $datos = [
+        'nombre'=> $this->input->post('nombre', TRUE),
+        'host'=> $this->input->post('host', TRUE),
+        'database'=> $this->input->post('dbname', TRUE),
+        'password'=> $this->input->post('pass', TRUE),
+        'descripcion'=> $this->input->post('des', TRUE),
+        'user'=> $this->input->post('user', TRUE),
+      ];
+
+      $instancia = $this->dbhost->create( $datos );
+
+      $dataView['title'] = 'Instancia';
+      $dataView['msg'] = 'La instancia de la base de datos se almacenó correctamente';
+      $dataView['instancia'] = $this->dbhost;
+      $content = $this->load->view('mgr/successInstancia' , $dataView, TRUE);
+    }
+
+    $data = [
+      'header'=> ['title' => 'Instancias', 
+        'stylesheets'=> [
+          // "public/lib/datatables.net-dt/css/jquery.dataTables.min.css",
+        ]
+      ],
+      'aside'=> ['adminSistemas' => 'active'],
+      'footer'=> [
+        'scripts'=> [
+          // "public/lib/datatables.net/js/jquery.dataTables.min.js",
+          // "public/lib/datatables.net-dt/js/dataTables.dataTables.min.js",
+        ]
+      ],
+      'nav'=> compact('breadcrumbMain', 'breadcrumbSecondary'),
+      'body'=> $content,
+    ];
+    
+    $this->markup->laucherView($data); 
+
+
+  }
+
+  protected function obtenerInstancias(){
+
+    $breadcrumbMain = 'Instancias';
+    $breadcrumbSecondary = 'Listado';
+
+    $dataView = [];
+
+    $content = $this->load->view('mgr/instancias' , $dataView, TRUE);
+
+    $data = [
+      'header'=> ['title' => 'Instancias', 
+        'stylesheets'=> [
+          // "public/lib/datatables.net-dt/css/jquery.dataTables.min.css",
+        ]
+      ],
+      'aside'=> ['adminSistemas' => 'active'],
+      'footer'=> [
+        'scripts'=> [
+          "public/lib/datatables.net/js/jquery.dataTables.min.js",
+          "public/lib/datatables.net-dt/js/dataTables.dataTables.min.js",
+        ]
+      ],
+      'nav'=> compact('breadcrumbMain', 'breadcrumbSecondary'),
+      'body'=> $content,
+    ];
+    
+    $this->markup->laucherView($data);    
+
+  }
+
+  //JSON de instancias
+  public function getInstancias(){
+
+    $this->load->model('dash/Instancias');
+    $r = $this->Instancias->getAll();
+    foreach ($r as &$item){
+      unset( $item->password );
+    }
+    echo json_encode( $r );
   }
 
 

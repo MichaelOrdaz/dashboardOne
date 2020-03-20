@@ -22,7 +22,7 @@
 <div class="row ">
   <div class="col">
     <div class="card">
-      <div class="card-body text-right">
+      <div class="card-body text-right p-1">
         <a href="<?= base_url('mgr/gestion/usuarios') ?>" class="btn btn-outline-info"> <i class="fas fa-redo"></i> Regresar </a>
       </div>
     </div>
