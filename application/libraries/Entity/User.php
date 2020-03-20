@@ -82,35 +82,6 @@ class User {
 
   }
 
-  /**
-   * [asignarPass asigna una contraseña a una instancia del objeto usuario]
-   * @param  string $mode [string con valores auto, false, o false]
-   * @param  string $pass [description]
-   * @return [type]       [description]
-   */
-  public function asignarPass( string $mode = 'auto', string $pass = '' ){
-
-    if( 'auto' === $mode ){
-      $this->load->helper('string');
-      $pass = random_string('alnum', 8);
-    }
-    $this->pass = $this->generatePass($pass);
-
-  }
-
-
-  /**
-   * [generatePass genera el hash de la contraseña dada]
-   * @param  string $plainTxt [la contrasela en texto plano]
-   * @return string la contraseña hasheada
-   */
-  protected function generateHash( $plainTxt ): string{
-    // apply hash
-    $pass = password_hash($this->pass, PASSWORD_DEFAULT);
-    $info = password_get_info($pass);
-    return $pass;
-  }
-
 
 
 
