@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function(){
       {
         orderable: false,
         data: (row, type, val, meta)=>{
-          return `<button type="button" class="btn btn-xs btn-info info" title="Más"> <i class="fa fa-plus"></i> </button>
+          return `
           <a href="${_uri}mgr/gestion/instancias/update/${row.id}" class="btn btn-xs btn-primary edit" title="editar datos"> <i class="fa fa-edit"></i></a>
           <button type="button" class="btn btn-xs btn-danger del" title="eliminar registro"> <i class="fa fa-times"></i> </button>`;
         }
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
 
-  $('#table_users').on('click', 'button', function(ev){
+  $('#table_host').on('click', 'button', function(ev){
 
     var data = oTable.row( this.closest('tr') ).data();
     console.log(data);
@@ -111,12 +111,9 @@ document.addEventListener('DOMContentLoaded', function(){
         if (result.value) {
             
           $.ajax({
-            url: _uri+'mgr/gestion/usuarios/delete',
+            url: _uri+'mgr/gestion/instancias/delete/'+data.id,
             type: 'POST',
             dataType: 'json',
-            data: {
-              id: data.id
-            },
             beforeSend: ()=>{
               Swal.fire({
                 title: 'Eliminando',

@@ -326,20 +326,22 @@ class Gestion extends CI_Controller {
     try{
     
       if( $action === 'list' ){
-
         $this->obtenerInstancias();
-
       }
       else if( $action === 'add' ){
-
         $this->createInstancia();
-
       }
       else if( $action === 'update' ){
-
+        if( ! is_numeric($idHost) ){
+          throw new Exception("La instancia para actualizar es invalida");
+        }
+        $this->updateInstancia($idHost);
       }
       else if( $action === 'delete' ){
-
+        if( ! is_numeric($idHost) ){
+          echo json_encode(['status'=> 0, 'msg'=> 'La Instancia es invalida']);
+        }
+        $this->deleteInstancia($idHost);
       }
 
     }
@@ -394,6 +396,81 @@ class Gestion extends CI_Controller {
     return $rules;
   }
 
+
+  protected function updateInstancia(int $id){
+
+    $this->load->helper('form');
+    $this->load->library('form_validation');
+
+    $breadcrumbMain = 'Instancias';
+    $breadcrumbSecondary = 'Actualizar';
+
+    $rules = $this->getRulesForm('updateInstancia');
+
+    $this->form_validation->set_rules( $rules );
+
+    if ( $this->form_validation->run() === FALSE ){
+
+      $dataView['title'] = 'Actualizar Instancia';
+      $dataView['titleForm'] = 'Actualizar Datos de la Instancias';
+      $content = $this->load->view('mgr/formInstancia' , $dataView, TRUE);
+
+    }
+    else{
+
+      $this->load->model('dash/InstanciaModel', 'dbhost');
+
+      $datos = [
+        'nombre'=> $this->input->post('nombre', TRUE),
+        'host'=> $this->input->post('host', TRUE),
+        'database'=> $this->input->post('dbname', TRUE),
+        'password'=> $this->input->post('pass', TRUE),
+        'descripcion'=> $this->input->post('des', TRUE),
+        'user'=> $this->input->post('user', TRUE),
+      ];
+
+      if( $this->dbhost->update( $id, $datos ) !== FALSE ){//si se almaceno correctamente
+        $instancia = $this->dbhost->getInstancia( ['id'=> $id] );//recupero la instancia recien guardada o false en cado de error
+        if( $instancia === FALSE ){
+          throw new Exception("Error al recuperar la instancia recien actualizada");
+        }
+
+        //verifico si me puedo conectar o no conectar
+        $this->load->helper('custom');//cargo mis helper
+        $statusConnection = connection_native( $instancia->host, $instancia->user, $instancia->password, $instancia->database );
+
+        $dataView['title'] = 'Instancia';
+        $dataView['msg'] = 'La instancia de la base de datos se actualizó correctamente';
+        $dataView['instancia'] = $statusConnection;
+        $dataView['host'] = $instancia->host;
+        $content = $this->load->view('mgr/successInstancia' , $dataView, TRUE);
+
+      }
+      else{//si no se regreso un id, lanzamos error, que debe ser cachado por la funcion llamadora
+        throw new Exception("Se produjo un error al almacenar la instancia, por favor reintente");
+      }
+    }
+
+    $data = [
+      'header'=> ['title' => 'Instancias', 
+        'stylesheets'=> [
+          // "public/lib/datatables.net-dt/css/jquery.dataTables.min.css",
+        ]
+      ],
+      'aside'=> ['adminSistemas' => 'active'],
+      'footer'=> [
+        'scripts'=> [
+          "public/mgr/updateInstancia.js",
+        ]
+      ],
+      'nav'=> compact('breadcrumbMain', 'breadcrumbSecondary'),
+      'body'=> $content,
+    ];
+    
+    $this->markup->laucherView($data); 
+
+  }
+
   protected function createInstancia(){
 
     $this->load->helper('form');
@@ -427,12 +504,27 @@ class Gestion extends CI_Controller {
         'user'=> $this->input->post('user', TRUE),
       ];
 
-      $instancia = $this->dbhost->create( $datos );
+      if( ( $insert_id = $this->dbhost->create( $datos ) ) !== FALSE ){//si se almaceno correctamente, me regresa el id
+        $instancia = $this->dbhost->getInstancia( ['id'=> $insert_id] );//recupero la instancia recien guardada o false en cado de error
+        if( $instancia === FALSE ){
+          throw new Exception("Error al recuperar la instancia recien almacenada", 1);
+        }
 
-      $dataView['title'] = 'Instancia';
-      $dataView['msg'] = 'La instancia de la base de datos se almacenó correctamente';
-      $dataView['instancia'] = $this->dbhost;
-      $content = $this->load->view('mgr/successInstancia' , $dataView, TRUE);
+        //verifico si me puedo conectar o no conectar
+        $this->load->helper('custom');//cargo mis helper
+        $statusConnection = connection_native( $instancia->host, $instancia->user, $instancia->password, $instancia->database );
+
+        $dataView['title'] = 'Instancia';
+        $dataView['msg'] = 'La instancia de la base de datos se almacenó correctamente';
+        $dataView['instancia'] = $statusConnection;
+        $dataView['host'] = $instancia->host;
+        $content = $this->load->view('mgr/successInstancia' , $dataView, TRUE);
+
+
+      }
+      else{//si no se regreso un id, lanzamos error, que debe ser cachado por la funcion llamadora
+        throw new Exception("Se produjo un error al almacenar la instancia, por favor reintente");
+      }
     }
 
     $data = [
@@ -483,7 +575,7 @@ class Gestion extends CI_Controller {
       'body'=> $content,
     ];
     
-    $this->markup->laucherView($data);    
+    $this->markup->laucherView($data);
 
   }
 
@@ -498,6 +590,42 @@ class Gestion extends CI_Controller {
     echo json_encode( $r );
   }
 
+  protected function deleteInstancia(int $id){
+    $this->load->model('dash/InstanciaModel', 'host');
+
+    $instancia = $this->host->getInstancia( ['id'=> $id] );
+    
+    if( $instancia ){
+      if( $this->host->delete($id) )
+        echo json_encode(['status'=> 1, 'msg'=> 'La instancia se elimino correctamente']);
+      else
+        echo json_encode(['status'=> 0, 'msg'=> 'La instancia no pudo eliminarse, por favor reintente']);
+    }
+    else{
+      echo json_encode(['status'=> 0, 'msg'=> 'La instancia es invalida']);
+    }
+  }
+
+
+  //recupera la informacion de una sola instancia por id
+  public function instancia( int $id ){
+
+    $response = [];
+    if( ( $id = filter_var($id, FILTER_VALIDATE_INT ) ) === FALSE ){
+      $response = ['status'=> 0, 'msg'=> 'La instancia es invalida'];
+    }
+    else{
+      $this->load->model('dash/InstanciaModel', 'host');
+      if( ( $instancia = $this->host->getInstancia( ['id'=> $id] ) ) !== FALSE ){
+        unset( $instancia->password );
+        $response = ['status'=> 1, 'msg'=> 'Ok', 'data'=> $instancia];
+      }
+      else{
+        $response = ['status'=> 0, 'msg'=> 'No se pudo obtener el usuario'];
+      }
+    }
+    echo json_encode( $response );
+  }
 
 
 }

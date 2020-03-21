@@ -71,16 +71,14 @@ if ( ! function_exists('connection_native') ){
   function connection_native( $host, $user, $pass, $dbname ){
 
     /* Conectar a una base de datos de MySQL invocando al controlador */
-    $dsn = "mysql:host={$host};dbname={$dbname}";
+    $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8";
     $usuario = $user;
     $contraseña = $pass;
 
     try {
       $gbd = new PDO($dsn, $usuario, $contraseña);
       $attributes = array(
-        "AUTOCOMMIT", "ERRMODE", "CASE", "CLIENT_VERSION", "CONNECTION_STATUS",
-        "ORACLE_NULLS", "PERSISTENT", "PREFETCH", "SERVER_INFO", "SERVER_VERSION",
-        "TIMEOUT"
+        "CONNECTION_STATUS", "SERVER_INFO", "SERVER_VERSION"
       );
 
       $connectionAttribute = [];

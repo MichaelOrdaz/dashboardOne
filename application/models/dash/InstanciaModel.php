@@ -80,11 +80,12 @@ class InstanciaModel extends CI_Model{
   }
 
   public function getInstancia( array $where ){
-    $r = $this->db->get_where('instancias', $where 1);
+    $r = $this->db->get_where('instancias', $where, 1);
 
     if( ! $this->db->affected_rows() > 0 ){
       return false;
     }
+    return $r->row();
 
   }
 
@@ -104,6 +105,26 @@ class InstanciaModel extends CI_Model{
     }
     else
       return FALSE;
+  }
+
+  public function delete( int $id ): bool{
+
+    $accion = "elimino {$this->session->userdata('dash_user')} fecha " . date('Y-m-d H:i:s') . " ip {$this->input->ip_address()},";
+
+    return $this->db->where('id', $id)
+      ->set( 'status', 0 )
+      ->set( 'acciones', "CONCAT(acciones, '{$accion}')", FALSE )
+      ->update('instancias');
+  }
+
+  public function update( int $id, array $datos ): bool {
+    
+    $accion = "editor {$this->session->userdata('dash_user')} fecha " . date('Y-m-d H:i:s') . " ip {$this->input->ip_address()},";
+
+    return $this->db->where('id', $id)
+      ->set( $datos )
+      ->set( 'acciones', "CONCAT(acciones, '{$accion}')", FALSE )
+      ->update('instancias');
   }
 
   public function getCountUsers(){

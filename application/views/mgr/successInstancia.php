@@ -8,14 +8,22 @@
         <div class="alert alert-success">
           <?= $msg ?? '' ?>
         </div>
-        
-        <?php if( $instancia ): ?>
+          
+
+
+        <?php if( is_array($instancia) ): ?>
           <div class="alert alert-info">
-            Se realizo la conexión con la instancia <?= $instancia->host ?> Satisfactoriamente <i class="fas fa-network-wired"></i> .
+            Se realizo la conexión con la instancia <?= $host ?> Satisfactoriamente <i class="fas fa-network-wired"></i> .
+            <ul class="list-unstyled">
+              <?php foreach( $instancia as $key => $attr ): ?>
+                <li> <?= $key .': '. $attr ?> </li>
+              <?php endforeach; ?>
+            </ul>
           </div>
         <?php else: ?>
           <div class="alert alert-warning">
-            No se logro la conexión con la instancia <?= $instancia->host ?>, hubo errores en la conexión, por favor verifique sus datos<br>
+            No se logro la conexión con la instancia <?= $host ?>, hubo errores en la conexión, por favor verifique sus datos<br>
+            Error: <?= utf8_encode($instancia) ?>
           </div>
         <?php endif; ?>
 
