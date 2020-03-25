@@ -127,15 +127,112 @@ class InstanciaModel extends CI_Model{
       ->update('instancias');
   }
 
-  public function getCountUsers(){
 
-    $r = $this->DB->query("SELECT count(idUser) as total FROM User where statusUser = 1");
-    $activeUsers = $r->row()->total;
-    // $this->DB->query("SELECT count(idUser) as total FROM User where statusUser = 1");
-    $totalUsers = $this->DB->count_all_results('User');
+  ///////////////
+  //  metodos  //
+  ///////////////
 
-    return compact('activeUsers', 'totalUsers');
+  /**
+   * [getCount ajecuta una funcion count de mysql]
+   * @param  string $table [tabla a la cual hara el conteo]
+   * @param  string $where [la parte where]
+   * @return [int]        [retorna el numero contado]
+   */
+  public function getCount( string $table, $where = '' ){
+
+    $this->DB->select('COUNT(*) as total')
+      ->from($table);
+    
+    if( $where )
+      $this->DB->where($where);
+    
+    $r = $this->DB->get();
+    
+    return $r->row()->total;
+
   }
+
+  /**
+   * Obtener los/el clientes
+   * @param [array] [where: array asociativo para buscar coincidencias en la base de datos]
+   * return array
+   */
+  public function getClientes( array $where = array() ){
+    $this->DB->select('idCliente, rfcCliente, cpCliente, nombreCliente, telefonoCliente, tipo');
+    if( $where )
+      $this->DB->where( $where );
+    $r = $this->DB->get('Cliente');
+    return $r->result();
+  }
+
+  public function uniqueRow($table, $where ){
+    $r = $this->DB->get_where($table, $where, 1);
+    return $r->row();
+  }
+
+  /**
+   * [consultar ejecuta una consulta a la tabla propocionada]
+   * @param  string $table  [tabla de la bd]
+   * @param  [mixed] $where  [parte where de la consulta]
+   * @param  [mixed] $fields [campos a seleccionar]
+   * @return [array]  [devuleve un array de resultados como objetos]
+   */
+  public function consultar( string $table, $where = null, $fields = null ){
+    if( $fields )
+      $this->DB->select($fields);
+    if( $where )
+      $this->DB->where( $where );
+
+    $r = $this->DB->get($table);
+    return $r->result(); 
+  }
+
+
+  public function getPromesasAgrupadas($initDate, $cliente){
+    //select count(*), date(fechaBitaGes) from bitacoragestion b2 where idCR = 'PP' and date(fechaBitaGes) > '2019-11-24' and idCliente = 3 group by date(fechaBitaGes)
+    $r = $this->DB->select( 'COUNT(*) as total, DATE(fechaBitaGes) as fecha' )
+      ->from('BitacoraGestion')
+      ->where('idCR', 'PP')
+      ->where('DATE(fechaBitaGes) >', $initDate)
+      ->where('idCliente', $cliente)
+      ->group_by( 'DATE(fechaBitaGes)' )
+      ->get();
+    return $r->result();
+
+  }
+
+  public function getPagosAgrupados($initDate, $cliente){
+    //select count(*), date(fechaBitaGes) from bitacoragestion b2 where idCR = 'PP' and date(fechaBitaGes) > '2019-11-24' and idCliente = 3 group by date(fechaBitaGes)
+    $r = $this->DB->select( 'COUNT(*) as total, DATE(fechaBitaGes) as fecha' )
+      ->from('BitacoraGestion')
+      ->where('idCR', 'PE')
+      ->where('DATE(fechaBitaGes) >', $initDate)
+      ->where('idCliente', $cliente)
+      ->group_by( 'DATE(fechaBitaGes)' )
+      ->get();
+    return $r->result();
+
+  }
+
+  public function getClientesConAsignacion(){
+    //select c.idCliente , c.rfcCliente , c.nombreCliente , c.cpCliente , c.tipo, count(ac.idCliente), c.statusCliente from cliente c join asignacioncobranza as ac on c.idCliente = ac.idCliente where 1 and ac.statusCuenta = 1 group by ac.idCliente ;
+    // $r = $this->DB->select("c.idCliente , c.rfcCliente , c.nombreCliente , c.cpCliente , c.tipo, COUNT(ac.idCliente) AS gestiones, c.statusCliente")
+    //   ->from('Cliente AS c')
+    //   ->join('AsignacionCobranza AS ac', 'ac.idCliente = c.idCliente')
+    //   ->group_by('ac.idCliente')
+    //   ->get();
+    //   
+    $r = $this->DB->select("c.idCliente , c.rfcCliente , c.nombreCliente , c.cpCliente , c.tipo, (SELECT COUNT(*) FROM AsignacionCobranza WHERE idCliente = c.idCliente) AS gestiones, c.statusCliente")
+      ->from('Cliente AS c')
+      ->get();
+    
+
+    return $r->result();
+
+  }
+
+
+
 
 
 }

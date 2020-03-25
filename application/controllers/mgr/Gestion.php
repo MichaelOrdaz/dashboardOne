@@ -338,10 +338,10 @@ class Gestion extends CI_Controller {
         $this->updateInstancia($idHost);
       }
       else if( $action === 'delete' ){
-        if( ! is_numeric($idHost) ){
+        if( ! is_numeric($idHost) )
           echo json_encode(['status'=> 0, 'msg'=> 'La Instancia es invalida']);
-        }
-        $this->deleteInstancia($idHost);
+        else
+          $this->deleteInstancia($idHost);
       }
 
     }
@@ -413,7 +413,16 @@ class Gestion extends CI_Controller {
 
       $dataView['title'] = 'Actualizar Instancia';
       $dataView['titleForm'] = 'Actualizar Datos de la Instancias';
+      
+      //recupero los datos
+      $this->load->model('dash/InstanciaModel', 'host');
+      $instancia = $this->host->getInstancia(['id'=> $id]);
+      if( $instancia === FALSE )
+        throw new Exception("La instancia que desea actualizar no existe, es invalida", 1);
+      
+      $dataView['host'] = $instancia;
       $content = $this->load->view('mgr/formInstancia' , $dataView, TRUE);
+
 
     }
     else{
@@ -460,7 +469,7 @@ class Gestion extends CI_Controller {
       'aside'=> ['adminSistemas' => 'active'],
       'footer'=> [
         'scripts'=> [
-          "public/mgr/updateInstancia.js",
+          // "public/mgr/updateInstancia.js",
         ]
       ],
       'nav'=> compact('breadcrumbMain', 'breadcrumbSecondary'),
@@ -487,7 +496,6 @@ class Gestion extends CI_Controller {
 
       $dataView['title'] = 'Agregar Instancia';
       $dataView['titleForm'] = 'Alta de Instancias en el sistema';
-      
       $content = $this->load->view('mgr/formInstancia' , $dataView, TRUE);
     
     }

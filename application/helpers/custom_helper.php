@@ -68,6 +68,14 @@ if ( ! function_exists('wrapper_message'))
 
 if ( ! function_exists('connection_native') ){
 
+  /**
+   * [connection_native realizaa uuna conexion a la base de datos con php puro para controlar los mensaje de error oo exito con la conexion proporcionada, si la conexion fue exitosa regresa un Array con los datos de la conexion, si falla, regresa el string error]
+   * @param  [string] $host   [host a conectar]
+   * @param  [string] $user   [usaurio de la base de datos]
+   * @param  [string] $pass   [contraseña]
+   * @param  [string] $dbname [base de datos]
+   * @return [mixed]          [array en cado de exito, string en caso de error]
+   */
   function connection_native( $host, $user, $pass, $dbname ){
 
     /* Conectar a una base de datos de MySQL invocando al controlador */

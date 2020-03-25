@@ -11,14 +11,14 @@ document.addEventListener('DOMContentLoaded', function(){
       type: 'GET',
       dataType: 'json',
       beforeSend: ()=>{
-        // Swal.fire({
-        //   'title': 'Cargando',
-        //   onOpen: () => {
-        //     Swal.showLoading()
-        //   },
-        //   allowOutsideClick: false,
-        //   allowEscapeKey: false
-        // });
+        Swal.fire({
+          'title': 'Cargando',
+          onOpen: () => {
+            Swal.showLoading()
+          },
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        });
       }
     })
     .done(function( response ) {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
   }
-  getData();
+  // getData();
   
 
 });

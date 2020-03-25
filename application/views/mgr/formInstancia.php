@@ -25,14 +25,14 @@
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
                 <label>Nombre *</label>
-                <input type="text" class="form-control" name="nombre" placeholder="Nombre de la Conexión" value="<?= set_value('nombre') ?>" maxlength="150" minlength="3" required />
+                <input type="text" class="form-control" name="nombre" placeholder="Nombre de la Conexión" value="<?= set_value('nombre', $host->nombre ?? '') ?>" maxlength="150" minlength="3" required />
               </div>
             </div>
 
             <div class="col-sm-6 col-md">
               <div class="form-group">
                 <label>Descripción</label>
-                <input type="text" class="form-control" name="des" placeholder="Descripción" value="<?= set_value('des') ?>" />
+                <input type="text" class="form-control" name="des" placeholder="Descripción" value="<?= set_value('des', $host->descripcion ?? '') ?>" />
               </div>
             </div>
 
@@ -43,28 +43,28 @@
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
                 <label>Hostname *</label>
-                <input type="text" class="form-control" name="host" placeholder="Dominio o IP" value="<?= set_value('host') ?>" maxlength="20" minlength="7" required />
+                <input type="text" class="form-control" name="host" placeholder="Dominio o IP" value="<?= set_value('host', $host->host ?? '') ?>" maxlength="20" minlength="7" required />
               </div>
             </div>
 
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
                 <label>Usuario *</label>
-                <input type="text" class="form-control" name="user" placeholder="usuario de la conexión" value="<?= set_value('user') ?>" maxlength="40" minlength="4" required />
+                <input type="text" class="form-control" name="user" placeholder="usuario de la conexión" value="<?= set_value('user', $host->user ?? '') ?>" maxlength="40" minlength="4" required />
               </div>
             </div>
 
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
                 <label>Contraseña *</label>
-                <input type="password" class="form-control" name="pass" placeholder="Contraseña del usuario para la conexión" value="<?= set_value('pass') ?>" maxlength="150" />
+                <input type="password" class="form-control" name="pass" placeholder="Contraseña del usuario para la conexión" value="" maxlength="150" />
               </div>
             </div>
 
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
                 <label>Nombre de la Base de Datos *</label>
-                <input type="text" class="form-control" name="dbname" placeholder="Nombre de la db para la conexión" value="<?= set_value('dbname') ?>" maxlength="150" required />
+                <input type="text" class="form-control" name="dbname" placeholder="Nombre de la db para la conexión" value="<?= set_value('dbname', $host->database ?? '') ?>" maxlength="150" required />
               </div>
             </div>
 
@@ -94,6 +94,19 @@ document.addEventListener('DOMContentLoaded', function(){
   
   var _ = document;
   var $$ = _.querySelector.bind(_);
+
+  //cargando para cuando se envie el formulario
+  
+  _.form_host.addEventListener('submit', function(ev){
+    Swal.fire({
+      'title': 'Cargando',
+      onOpen: () => {
+        Swal.showLoading()
+      },
+      allowOutsideClick: false,
+      allowEscapeKey: false
+    });
+  })
 
 
 });
