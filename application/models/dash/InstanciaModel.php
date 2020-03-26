@@ -240,10 +240,11 @@ class InstanciaModel extends CI_Model{
 
     $r = $this->DB->select("b.id{$codigoUpper}, (SELECT desc{$codigoUpper} FROM {$codigoUpper} WHERE idCliente = b.idCliente AND id{$codigoUpper} = b.id{$codigoUpper} LIMIT 1 ) AS descripcion, COUNT(*) AS total")
       ->from('BitacoraGestion AS b')
-      ->where('1', '(SELECT statusCuenta FROM asignacioncobranza a WHERE folio = b.folio)', FALSE)
+      // ->where('1', '(SELECT statusCuenta FROM AsignacionCobranza a WHERE folio = b.folio LIMIT 1)', FALSE)
       ->where('idCliente', $cliente)
       ->group_by("b.id{$codigoUpper}")
-      ->order_by('total')
+      ->order_by('total', 'DESC')
+      ->limit('50')
       ->get();
     return $r->result();
   }

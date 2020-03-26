@@ -144,7 +144,7 @@
 
 <div class="row row-xs my-2">
 
-  <div class="col-md-6">
+  <div class="col">
     <div class="card">
       <div class="card-header">
         <h6 class="mg-b-0">Gestiones en la Cartera</h6>
@@ -172,6 +172,10 @@
       </div><!-- card-footer -->
     </div><!-- card -->
   </div>
+
+</div>
+
+<div class="row row-xs my-2">
   
   <div class="col-md-6">
     <div class="card">
@@ -264,7 +268,7 @@ window.addEventListener('DOMContentLoaded', function(){
   console.log(codigos_a, codigos_r);
 
   //rescatar los primeros 15 codigos
-  var top10CR = codigos_r.splice(-10, 10);
+  var top10CR = codigos_r.splice(0, 10);
 
 
   var CRCanvas = $$("#chartCR");

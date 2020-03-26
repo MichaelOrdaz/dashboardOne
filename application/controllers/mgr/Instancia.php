@@ -214,8 +214,8 @@ class Instancia extends CI_Controller {
         'fechasLabel'=> array_values($fechas),
         'dataChartPromesa'=> $dataChartPromesa,
         'dataChartPago'=> $dataChartPago,
-        'codigos_r'=> $codigos_r,
-        'codigos_a'=> $codigos_a,
+        'codigos_r'=> $codigos_r ?? [],
+        'codigos_a'=> $codigos_a ?? [],
         'totalBitacoras'=> $totalBitacoras,
       ], TRUE);
       
