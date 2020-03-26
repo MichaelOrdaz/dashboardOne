@@ -50,7 +50,7 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub <?= $instanciasLink ?? '' ?>">
+      <li class="nav-item with-sub <?= $instanciasLink ?? '' ?> <?= isset($instanciasLink) ? 'show' : '' ?>">
         <a href="" class="nav-link"> <i data-feather="terminal"></i> <span>Instancias</span> </a>
         <ul>
           

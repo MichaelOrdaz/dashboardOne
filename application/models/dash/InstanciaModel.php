@@ -222,7 +222,7 @@ class InstanciaModel extends CI_Model{
     //   ->group_by('ac.idCliente')
     //   ->get();
     //   
-    $r = $this->DB->select("c.idCliente , c.rfcCliente , c.nombreCliente , c.cpCliente , c.tipo, (SELECT COUNT(*) FROM AsignacionCobranza WHERE idCliente = c.idCliente) AS gestiones, c.statusCliente")
+    $r = $this->DB->select("c.idCliente , c.rfcCliente , c.nombreCliente , c.cpCliente , c.tipo, (SELECT COUNT(*) FROM AsignacionCobranza WHERE idCliente = c.idCliente AND statusCuenta = 1) AS gestiones, c.statusCliente")
       ->from('Cliente AS c')
       ->get();
     
@@ -231,6 +231,22 @@ class InstanciaModel extends CI_Model{
 
   }
 
+
+
+  public function obtenerCodigo( $codigo, $cliente ){
+    // select b.idCR, (select cr.descCR from cr where idCliente = b.idCliente and idCR = b.idCR limit 1 ) as descripcion, COUNT(*) as total from bitacoragestion b where 1 = (select statusCuenta from asignacioncobranza a where folio = b.folio) group by b.idCR  order by total;
+    //tipos de codigo son CR = codigo de resultado y CA codigo de accion
+    $codigoUpper = strtoupper($codigo);
+
+    $r = $this->DB->select("b.id{$codigoUpper}, (SELECT desc{$codigoUpper} FROM {$codigoUpper} WHERE idCliente = b.idCliente AND id{$codigoUpper} = b.id{$codigoUpper} LIMIT 1 ) AS descripcion, COUNT(*) AS total")
+      ->from('BitacoraGestion AS b')
+      ->where('1', '(SELECT statusCuenta FROM asignacioncobranza a WHERE folio = b.folio)', FALSE)
+      ->where('idCliente', $cliente)
+      ->group_by("b.id{$codigoUpper}")
+      ->order_by('total')
+      ->get();
+    return $r->result();
+  }
 
 
 

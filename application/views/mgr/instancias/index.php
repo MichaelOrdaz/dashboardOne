@@ -34,7 +34,7 @@
       <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total de Gestiones</h6>
       <div class="d-flex d-lg-block d-xl-flex align-items-center">
         <i class="fas fa-clipboard-check fa-lg"></i>
-        <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= $gestiones['activeGestion'] ?> </h3>
+        <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= number_format($gestiones['activeGestion'], 0, '', ' ') ?> </h3>
       </div>
     </div>
   </div><!-- col -->

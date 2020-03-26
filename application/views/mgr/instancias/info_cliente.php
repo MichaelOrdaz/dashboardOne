@@ -1,6 +1,16 @@
 <h4 class="mg-b-0 tx-spacing--1">Cartera <b> <?= $carteraCliente ?> </b> </h4>
 
-<div class="row mb-2">
+<div class="row row-xs my-2">
+  <div class="col">
+    <div class="card">
+      <div class="card-body text-right p-1">
+        <a href="<?= base_url('mgr/instancia/index/'.$this->uri->segment(4)) ?>" class="btn btn-outline-info"> <i class="fas fa-redo"></i> Regresar </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-xs my-2">
 
   <div class="col-md">
     <div class="card card-body">
@@ -17,8 +27,7 @@
       <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total de Gestiones</h6>
       <div class="d-flex d-lg-block d-xl-flex align-items-center">
         <i class="fas fa-clipboard-check fa-lg"></i>
-        <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= $gestiones['activeGestion'] ?> </h3>
-        <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger"> <?= $gestiones['totalGestion'] ?> <i class="icon ion-md-arrow-down"></i></span></p>
+        <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= number_format($gestiones['activeGestion'], 0, '', ' ') ?> </h3>
       </div>
     </div>
   </div><!-- col -->
@@ -36,9 +45,9 @@
 </div>
 
 
-<div class="row">
+<div class="row row-xs">
 
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div class="card">
       <div class="card-header">
         <h6 class="mg-b-0">Gestiones en la Cartera</h6>
@@ -66,13 +75,76 @@
       </div><!-- card-footer -->
     </div><!-- card -->
   </div>
-  
-  
+
+
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
+        <div>
+          <h6 class="mg-b-5"> Top 10 Respuestas de Códigos de Resultado en las Bitacoras </h6>
+        </div>
+      </div><!-- card-header -->
+      <div class="card-body pd-lg-25">
+        <div class="row align-items-sm-end">
+          <div class="col">
+            <div class="chart-six">
+              <canvas id="chartCR"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- card-body -->
+    </div><!-- card -->
+  </div>
 
 </div>
 
-<div class="row my-2">
+<div class="row row-xs my-2">
+  
   <div class="col">
+    
+    <div class="card">
+      <div class="card-header">Gestiones de Códigos de Resultado</div>
+      <div class="card-body">
+        
+        <p class="text-muted"> De las <?= number_format($totalBitacoras, 0, '', ' ') ?> Bitacoras, los Códigos de Resultados son </p>        
+        <div class="row">
+          
+          <?php 
+          for($i = 0, $length = count($codigos_r); $i < $length; $i++): 
+            $code = $codigos_r[$i];
+            if( in_array($i, [0, 10, 20, 30, 40, 50]) )
+              echo '<div class="col-sm-6 col-md"> <ul class="list-group">';          
+          ?>
+                
+                <li class="list-group-item d-flex px-2 py-1">
+                  <div class="pd-sm-l-10">
+                    <p class="tx-medium mg-b-0"> <?= $code->idCR ?> </p>
+                    <small class="tx-12 tx-color-03 mg-b-0"> <?= $code->descripcion ?> </small>
+                  </div>
+                  <div class="mg-l-auto text-right">
+                    <p class="tx-medium mg-b-0"> <?= $code->total ?> </p>
+                  </div>
+                </li>
+              
+          <?php 
+            if( in_array($i, [9, 19, 29, 39, 49, 59]) || $i === ($length-1) )
+              echo '</ul> </div>';
+          endfor; 
+          ?>
+
+        </div>
+
+      </div>  
+    </div>
+
+  </div>
+
+</div>
+
+<div class="row row-xs my-2">
+
+  <div class="col-md-6">
     <div class="card">
       <div class="card-header">
         <h6 class="mg-b-0">Gestiones en la Cartera</h6>
@@ -100,11 +172,77 @@
       </div><!-- card-footer -->
     </div><!-- card -->
   </div>
+  
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
+        <div>
+          <h6 class="mg-b-5"> Top 10 Códigos de Acción en las Bitacoras </h6>
+        </div>
+      </div><!-- card-header -->
+      <div class="card-body pd-lg-25">
+        <div class="row align-items-sm-end">
+          <div class="col">
+            <div class="chart-six">
+              <canvas id="chartCA"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- card-body -->
+    </div><!-- card -->
+  </div>
+
+</div>
+
+
+<div class="row row-xs my-2">
+  
+  <div class="col">
+    
+    <div class="card">
+      <div class="card-header">Gestiones de Códigos de Acción</div>
+      <div class="card-body">
+        
+        <p class="text-muted"> De las <?= number_format($totalBitacoras, 0, '', ' ') ?> Bitacoras, los Códigos de Acción son </p>        
+        <div class="row">
+          
+          <?php 
+          for($i = 0, $length = count($codigos_a); $i < $length; $i++): 
+            $code = $codigos_a[$i];
+            if( in_array($i, [0, 10, 20, 30, 40, 50]) )
+              echo '<div class="col-sm-6 col-md"> <ul class="list-group">';          
+          ?>
+                
+                <li class="list-group-item d-flex px-2 py-1">
+                  <div class="pd-sm-l-10">
+                    <p class="tx-medium mg-b-0"> <?= $code->idCA ?> </p>
+                    <small class="tx-12 tx-color-03 mg-b-0"> <?= $code->descripcion ?> </small>
+                  </div>
+                  <div class="mg-l-auto text-right">
+                    <p class="tx-medium mg-b-0"> <?= $code->total ?> </p>
+                  </div>
+                </li>
+              
+          <?php 
+            if( in_array($i, [9, 19, 29, 39, 49, 59]) || $i === ($length-1) )
+              echo '</ul> </div>';
+          endfor; 
+          ?>
+
+        </div>
+
+      </div>  
+    </div>
+
+  </div>
+
 </div>
 
 <pre>
 <?php 
-
+  // var_dump($codigos_r);
+  // var_dump($codigos_a);
 ?>
 </pre>
 
@@ -119,6 +257,42 @@ window.addEventListener('DOMContentLoaded', function(){
     // var fechas = [];
     // for( var init = moment().subtract(1, 'M') )
   // }
+  // 
+  var codigos_a = JSON.parse('<?= json_encode($codigos_a, JSON_HEX_QUOT|JSON_HEX_APOS) ?>');
+  var codigos_r = JSON.parse('<?= json_encode($codigos_r, JSON_HEX_QUOT|JSON_HEX_APOS) ?>');
+
+  console.log(codigos_a, codigos_r);
+
+  //rescatar los primeros 15 codigos
+  var top10CR = codigos_r.splice(-10, 10);
+
+
+  var CRCanvas = $$("#chartCR");
+  var barChart = new Chart(CRCanvas, {
+    type: 'bar',
+    data: {
+      labels: top10CR.map( item=> item.idCR ),
+      datasets: [{
+        label: 'Código de Resultado',
+        data: top10CR.map(item=> item.total),
+        backgroundColor: '#065f04'
+      }]
+    }
+  });
+
+  var top10CA = codigos_a.splice(-10, 10);
+  var CACanvas = $$("#chartCA");
+  var barChart = new Chart(CACanvas, {
+    type: 'bar',
+    data: {
+      labels: top10CA.map( item=> item.idCA ),
+      datasets: [{
+        label: 'Código de Resultado',
+        data: top10CA.map(item=> item.total),
+        backgroundColor: 'navy'
+      }]
+    }
+  });
 
   //canvas de promesas de pago y pagos ejecutados
   var pp_pe = $$("#gestiones");
@@ -156,37 +330,6 @@ window.addEventListener('DOMContentLoaded', function(){
   });
 
 
-  /** PIE CHART de usuarios **/
-  // For a pie chart
-  /*
-  var ctx2 = document.getElementById('chartDonut');
-  var myDonutChart = new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-      labels: ['Activos', 'Inactivos'],
-      datasets: [{
-        data: [
-          Number( $$('#userActive').textContent ),
-          Number( $$('#userInactive').textContent ),
-        ],
-        backgroundColor: ['green', 'red']
-      }]
-    },
-    options: {
-      // maintainAspectRatio: false,
-      responsive: true,
-      legend: {
-        display: false,
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
-      }
-    }
-  });
-  */
-
-
   /** PIE CHART de gESTIONES DE LA CARTERA **/
   // For a pie chart
   var ctxGestion = document.getElementById('chartDonut2');
@@ -203,7 +346,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }]
     },
     options: {
-      // maintainAspectRatio: false,
+      maintainAspectRatio: false,
       responsive: true,
       legend: {
         display: false,

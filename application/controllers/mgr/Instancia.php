@@ -195,6 +195,13 @@ class Instancia extends CI_Controller {
           $dataChartPago[$idx] = $last_pagos[$fecha];
       }
 
+      //recuperar los codigo de resultado de las bitacoras
+      $totalBitacoras = $this->dbhost->getCount('BitacoraGestion', ['idCliente'=> $cliente]);
+
+      $codigos_r = $this->dbhost->obtenerCodigo('CR', $cliente);
+      $codigos_a = $this->dbhost->obtenerCodigo('CA', $cliente);
+
+
       
       $content = $this->load->view('mgr/instancias/info_cliente.php' , [
         // 'conteo'=> $conteo,
@@ -207,7 +214,9 @@ class Instancia extends CI_Controller {
         'fechasLabel'=> array_values($fechas),
         'dataChartPromesa'=> $dataChartPromesa,
         'dataChartPago'=> $dataChartPago,
-
+        'codigos_r'=> $codigos_r,
+        'codigos_a'=> $codigos_a,
+        'totalBitacoras'=> $totalBitacoras,
       ], TRUE);
       
       ///////////////////
@@ -271,7 +280,7 @@ class Instancia extends CI_Controller {
 
       $this->establecerInstancia($host);
 
-      $usuarios = $this->dbhost->consultar('User', ['statusUser'=> 1], 'idUser, nombreUser, paternoUser, maternoUser, emailUser , (SELECT nombreNivel FROM Nivel WHERE idNivel = nivelUser) AS nivel');
+      $usuarios = $this->dbhost->consultar('User', NULL, 'idUser, nombreUser, paternoUser, maternoUser, emailUser , (SELECT nombreNivel FROM Nivel WHERE idNivel = nivelUser) AS nivel, statusUser');
       
       $content = $this->load->view('mgr/instancias/usuarios.php' , [
         'host'=> $this->dbhost->host,
@@ -307,10 +316,7 @@ class Instancia extends CI_Controller {
         ],
         'body'=> $content,
       ];
-
-      
       $this->markup->laucherView($data);
-
     }
     catch( Exception $e ){
 
