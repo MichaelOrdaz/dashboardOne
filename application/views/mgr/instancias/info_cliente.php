@@ -211,7 +211,7 @@
 
         <div class="row">
           <div class="col">
-            <div class="alert-alert-info">
+            <div class="alert alert-info">
               Las filas amarillas indican que el cliente no realizo el pago el dia prometido, el verde que realizo el pago en el día que indico 
             </div>
           </div>
