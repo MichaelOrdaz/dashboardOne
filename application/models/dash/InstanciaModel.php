@@ -251,5 +251,88 @@ class InstanciaModel extends CI_Model{
 
 
 
+  public function getPromesasToDT($request, $client, $fecha){
+
+    // select idBitaGes, telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR from BitacoraGestion bg where idCR = 'PP' AND idCliente = 3 AND DATE(fechaBitaGes) > '2020-02-26';
+
+    // los indices de las columnas de datatable deben coincidir conm el nombrte en la base de datos
+    $columns = array(
+      'dmname',
+      'telContactBitaGes',
+      'fechaProxContactBitaGes',
+      'fechaBitaGes',
+      'folio',
+      'idCR',
+      'cumplio',
+    );
+
+    $totalFiltered = $totalData = 0;
+
+    $sql = "SELECT idBitaGes, telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR, (select COUNT(*) FROM BitacoraGestion bg2 WHERE DATE(bg2.fechaBitaGes) = DATE(bg.fechaProxContactBitaGes) AND bg2.idCliente = bg.idCliente AND bg2.folio = bg.folio AND bg2.idCR = 'PE') AS cumplio FROM BitacoraGestion bg WHERE idCR = 'PP' AND idCliente = '{$client}' AND DATE(fechaBitaGes) > '{$fecha}' ";
+    $sqlCount = "SELECT COUNT(*) AS total from BitacoraGestion bg WHERE idCR = 'PP' AND idCliente = '{$client}' AND DATE(fechaBitaGes) > '{$fecha}' ";
+
+    $result = $this->DB->query( $sqlCount );
+    $totalData = $totalFiltered = $result->row()->total;
+
+        // Si exiten parametros de busqueda (provenientes del cuadro de busqueda da la datatable) se aplican
+    // los campos evaluados en el where se deben reemplazar por los que contenga la tabla a seleccionar
+    if( ! empty( $request['search']['value'] ) ){
+      $sqlSearch = " AND ( telContactBitaGes LIKE '%{$request['search']['value']}%' OR fechaProxContactBitaGes LIKE '%{$request['search']['value']}%' OR fechaBitaGes LIKE '%{$request['search']['value']}%')";
+      $sql .= $sqlSearch;
+      $sqlCount .= $sqlSearch;
+      $result = $this->DB->query( $sqlCount );
+      $totalFiltered = $result->row()->total;
+    }
+
+    // Es importante declarar el array colums de esa forma la datatable podrá ordenar ascendente o descendente los registros
+    $sql .= " ORDER BY " . $columns[$request['order'][0]['column']] ." {$request['order'][0]['dir']} ";
+    // LIMIT
+    $sql .= " LIMIT ".intval($request['start']).", ".intval($request['length']);
+    //ejecutamos el query Final
+    $result = $this->DB->query( $sql );
+
+    $rows = $result->result();
+
+    //Este array es el que recibe la datatable y convierte en el resultado deseado
+    return array(
+      "draw" => intval($request['draw']),   // Registros por paginado
+      "recordsTotal" => intval($totalData),   // Registros totales
+      "recordsFiltered" => intval($totalFiltered),// Registros filtrados por el cuadro de busqueda
+      "data" => $rows,  // Objeto que contiene la tabla a ser mostrada
+      'sql'=> $sql
+    );
+
+    /*
+    $sql = $this->DB->select('idBitaGes, telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR')
+      ->from('BitacoraGestion')
+      ->where(['idCR'=> 'PP', 'idCliente'=> $client, 'DATE(fechaBitaGes) >'=> $fecha])
+      ->group_start()
+        ->like('telContactBitaGes')
+        ->or_like('fechaProxContactBitaGes')
+        ->or_like('fechaBitaGes')
+      ->group_end()
+      ->order_by()
+      ->limit()
+      ->get_compiled_select();
+    */
+  }
+
+
+  public function contarPromesasCumplidas($client, $date){
+
+    // $r = $this->DB->query("SELECT SUM( IF( (SELECT COUNT(*) FROM BitacoraGestion bg2 WHERE DATE(bg2.fechaBitaGes) = DATE(bg.fechaProxContactBitaGes) AND bg2.idCliente = bg.idCliente AND bg2.folio = bg.folio AND bg2.idCR = 'PE') > 0, 1, 0 ) ) AS cumplidos FROM BitacoraGestion bg WHERE idCR = 'PP' AND idCliente = '{$client}' AND DATE(fechaBitaGes) > '{$date}'");
+
+    // return $r->row()->cumplidos;
+    $r = $this->DB->query("SELECT (SELECT COUNT(*) FROM BitacoraGestion bg2 WHERE DATE(bg2.fechaBitaGes) = DATE(bg.fechaProxContactBitaGes) AND bg2.idCliente = bg.idCliente AND bg2.folio = bg.folio AND bg2.idCR = 'PE' ) AS cumplio FROM BitacoraGestion bg WHERE idCR = 'PP' AND idCliente = '{$client}' AND DATE(fechaBitaGes) > '{$date}'");
+    $cumplidos = 0;
+
+    foreach ($r->result() as $item) {
+      if( $item->cumplio > 0 )
+        $cumplidos++;   
+    }
+    return $cumplidos;
+
+  }
+
 
 }

@@ -201,7 +201,11 @@ class Instancia extends CI_Controller {
       $codigos_r = $this->dbhost->obtenerCodigo('CR', $cliente);
       $codigos_a = $this->dbhost->obtenerCodigo('CA', $cliente);
 
+      //prmoesas de pago para mañana
+      $pp_tomorrow = $this->dbhost->getCount('BitacoraGestion', ['idCR'=> 'PP', 'idCliente'=> $cliente, 'DATE(fechaProxContactBitaGes)' => ( new DateTime() )->add( new DateInterval('P1D') )->format('Y-m-d') ]);
 
+      //contar las promesas de pago que se cumplieron en dia y forma
+      $pp_cumplidas = $this->dbhost->contarPromesasCumplidas($cliente, $initDate);
       
       $content = $this->load->view('mgr/instancias/info_cliente.php' , [
         // 'conteo'=> $conteo,
@@ -217,6 +221,8 @@ class Instancia extends CI_Controller {
         'codigos_r'=> $codigos_r ?? [],
         'codigos_a'=> $codigos_a ?? [],
         'totalBitacoras'=> $totalBitacoras,
+        'pp_tomorrow'=> $pp_tomorrow,
+        'pp_cumplidas'=> $pp_cumplidas,
       ], TRUE);
       
       ///////////////////
@@ -393,6 +399,58 @@ class Instancia extends CI_Controller {
 
   }
 
+
+  public function promesas_pago( $host, $client ){
+
+
+    try{
+
+      if( ! is_numeric($host) )
+        throw new Exception("La instancia es invalida");
+
+      $this->establecerInstancia($host);
+
+      $request = $this->input->post(NULL, TRUE);
+      
+      $initDate = ( new DateTime() )->sub( new DateInterval('P1M') )->format('Y-m-d');
+
+      //obtener registros
+      $response = $this->dbhost->getPromesasToDT($request, $client, $initDate);
+
+      //sacamos el nombre del cliente
+      foreach( $response['data'] as &$row ){
+        $item = $this->dbhost->uniqueRow('AsignacionCobranza', ['folio'=> $row->folio, 'idCliente'=> $client]);
+        $row->name = $item ? $item->dmname : '';
+
+        //tambien sacamos el numero de dias que han transcurrido en caso de haber prometido el pago
+        //hasta hoy
+        if( $row->cumplio > 0 )
+          continue;
+
+        try{
+          $dt = new DateTime( $row->fechaProxContactBitaGes );
+          $now = new DateTime();
+
+          $row->interval = ( $dt->diff($now) )->format('%R%a días');
+        }
+        catch(Exception $e){
+          continue;
+        }
+
+      }
+      unset($row);
+
+      echo json_encode($response);
+
+    }
+    catch( Exception $e ){
+      echo json_encode([
+        'draw'=> intval($request['draw']),
+        'error'=> 'Error al procesar la información , por favor reintente, ERROR: ' . $e->getMessage()
+      ]);
+    }
+
+  }
 
 
 

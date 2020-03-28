@@ -1,5 +1,9 @@
 <h4 class="mg-b-0 tx-spacing--1">Cartera <b> <?= $carteraCliente ?> </b> </h4>
 
+<?php
+  // echo ( new DateTime() )->add( new DateInterval('P1D') )->format('Y-m-d');
+?>
+
 <div class="row row-xs my-2">
   <div class="col">
     <div class="card">
@@ -177,6 +181,67 @@
 
 <div class="row row-xs my-2">
   
+  <div class="col">
+    
+    <div class="card border-primary">
+      <div class="card-header">
+        <h4>Análisis de las Promesas de Pago del Ultimo Mes</h4>
+      </div>
+      <div class="card-body">
+        
+        <div class="row mb-3">
+        
+          <div class="col-sm border py-2">            
+            <h6 class="text-muted"> Promesas de Pago Mañana </h6>
+            <div class="d-flex d-lg-block d-xl-flex align-items-center">
+              <i class="fas fa-hand-holding-usd fa-lg"></i>
+              <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 text-success ml-2"> <?= $pp_tomorrow ?> </h3>
+            </div>
+          </div>
+
+          <div class="col-sm border py-2">            
+            <h6 class="text-muted"> <abbr title="Promesas de Pago">P.P.</abbr> Cumplidas el Día Prometido </h6>
+            <div class="d-flex d-lg-block d-xl-flex align-items-center">
+              <i class="fas fa-hand-holding-usd fa-lg"></i>
+              <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 text-success ml-2"> <?= $pp_cumplidas ?> </h3>
+            </div>
+          </div>
+        
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="alert-alert-info">
+              Las filas amarillas indican que el cliente no realizo el pago el dia prometido, el verde que realizo el pago en el día que indico 
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm" id="tabla_promesas">
+            <thead>
+              <!-- telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR -->
+              <th>Nombre</th>
+              <th>Telefono</th>
+              <th>Proxima Fecha</th>
+              <th>Fecha</th>
+              <th>Folio</th>
+              <th>C.R.</th>
+              <th>Cumplio</th>
+              <th>Días</th>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="row row-xs my-2">
+  
   <div class="col-md-6">
     <div class="card">
       <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
@@ -284,7 +349,7 @@ window.addEventListener('DOMContentLoaded', function(){
     }
   });
 
-  var top10CA = codigos_a.splice(-10, 10);
+  var top10CA = codigos_a.splice(0, 10);
   var CACanvas = $$("#chartCA");
   var barChart = new Chart(CACanvas, {
     type: 'bar',
@@ -360,6 +425,47 @@ window.addEventListener('DOMContentLoaded', function(){
         animateRotate: true
       }
     }
+  });
+
+
+
+
+  var oTable = $("#tabla_promesas").DataTable({
+    order: [ [3, 'desc'] ],
+    language: {
+      url: _uri+'public/assets/Spanish.json',
+    },
+    "processing": true,
+    "serverSide": true,
+    ajax: {
+      url: _uri+"mgr/instancia/promesas_pago/<?= $this->uri->segment(4) .'/'. $this->uri->segment(5) ?> ",
+      type: 'POST',
+    },
+    createdRow: (row, data, index)=>{
+      if( Number(data.cumplio) > 0 ){
+        row.classList.add('table-success');
+      }
+      else{
+        row.classList.add('table-warning');
+      }
+    },
+    columns: [
+    //telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR
+      {data: 'name', defaultContent: 'unknown', orderable: false},
+      {data: 'telContactBitaGes', defaultContent: ''},
+      {data: 'fechaProxContactBitaGes', defaultContent: ''},
+      {data: 'fechaBitaGes', defaultContent: ''},
+      {data: 'folio', defaultContent: ''},
+      {data: 'idCR', defaultContent: ''},
+      {data: (row, data)=> Number(row.cumplio) > 0 ? 'Si' : 'No'
+      },
+      {
+        data: 'interval', 
+        defaultContent: '',
+        orderable: false
+      },
+    ]
+
   });
 
 
