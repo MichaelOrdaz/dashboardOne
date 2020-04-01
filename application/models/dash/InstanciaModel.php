@@ -259,8 +259,8 @@ class InstanciaModel extends CI_Model{
     $columns = array(
       'dmname',
       'telContactBitaGes',
-      'fechaProxContactBitaGes',
       'fechaBitaGes',
+      'fechaProxContactBitaGes',
       'folio',
       'idCR',
       'cumplio',

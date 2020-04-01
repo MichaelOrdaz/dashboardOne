@@ -28,7 +28,7 @@
   </div><!-- col -->
   <div class="col-md">
     <div class="card card-body">
-      <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total de Gestiones</h6>
+      <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total de Gestiones Activas</h6>
       <div class="d-flex d-lg-block d-xl-flex align-items-center">
         <i class="fas fa-clipboard-check fa-lg"></i>
         <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= number_format($gestiones['activeGestion'], 0, '', ' ') ?> </h3>
@@ -37,7 +37,7 @@
   </div><!-- col -->
   <div class="col-md">
     <div class="card card-body">
-      <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"> <abbr title="Promesas de Pago">P.P.</abbr> Pasadas / Cumplidas </h6>
+      <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"> <abbr title="Promesa">P.</abbr> Pago / <abbr title="Pago">P.</abbr> Ejecutado <small> <?= $startDate . '::' . $endDate ?> </small> </h6>
       <div class="d-flex d-lg-block d-xl-flex align-items-center">
         <i class="fas fa-comments-dollar fa-lg"></i>
         <h3 class="tx-normal tx-rubik mg-b-0 ml-2 lh-1"> <span id="promesas"> <?= $promesas ?> </span> / <span id="cumplidos"> <?= $pagos ?> </span> </h3>
@@ -61,18 +61,25 @@
       </div><!-- card-body -->
       <div class="card-footer pd-20">
         <div class="row">
-          <div class="col-6">
+          <div class="col-sm">
             <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">Gestiones Activas</p>
             <div class="d-flex align-items-center">
               <div class="wd-10 ht-10 rounded-circle mg-r-5" style="background-color: skyblue"></div>
               <h6 class="tx-normal tx-rubik mg-b-0" id="gestionActive"> <?= $gestiones['activeGestion'] ?> </h6>
             </div>
           </div><!-- col -->
-          <div class="col-6">
-            <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Gestiones Concluidas</p>
+          <div class="col-sm">
+            <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Gestiones Inactivas</p>
             <div class="d-flex align-items-center">
               <div class="wd-10 ht-10 rounded-circle mg-r-5" style="background-color: gray"></div>
               <h6 class="tx-normal tx-rubik mg-b-0" id="gestionInactive" > <?= ( $gestiones['totalGestion'] - $gestiones['activeGestion'] ) ?> </h6>
+            </div>
+          </div><!-- col -->
+          <div class="col-sm">
+            <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Total de Gestiones </p>
+            <div class="d-flex align-items-center">
+              <div class="wd-10 ht-10 rounded-circle mg-r-5" style="background-color: navy"></div>
+              <h6 class="tx-normal tx-rubik mg-b-0" id="gestionInactive" > <?= $gestiones['totalGestion'] ?> </h6>
             </div>
           </div><!-- col -->
         </div><!-- row -->
@@ -85,7 +92,7 @@
     <div class="card">
       <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
         <div>
-          <h6 class="mg-b-5"> Top 10 Respuestas de Códigos de Resultado en las Bitacoras </h6>
+          <h6 class="mg-b-5"> Top Ten Códigos de Resultado </h6>
         </div>
       </div><!-- card-header -->
       <div class="card-body pd-lg-25">
@@ -156,24 +163,36 @@
       <div class="card-body pd-lg-25">
         <div class="chart-seven"><canvas id="gestiones"></canvas></div>
       </div><!-- card-body -->
-      <div class="card-footer pd-20">
-        <div class="row">
-          <div class="col-6">
-            <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">Gestiones Activas</p>
-            <div class="d-flex align-items-center">
-              <div class="wd-10 ht-10 rounded-circle mg-r-5" style="background-color: skyblue"></div>
-              <h6 class="tx-normal tx-rubik mg-b-0" id="gestionActive"> <?= $gestiones['activeGestion'] ?> </h6>
-            </div>
-          </div><!-- col -->
-          <div class="col-6">
-            <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Gestiones Concluidas</p>
-            <div class="d-flex align-items-center">
-              <div class="wd-10 ht-10 rounded-circle mg-r-5" style="background-color: gray"></div>
-              <h6 class="tx-normal tx-rubik mg-b-0" id="gestionInactive" > <?= ( $gestiones['totalGestion'] - $gestiones['activeGestion'] ) ?> </h6>
-            </div>
-          </div><!-- col -->
-        </div><!-- row -->
-      </div><!-- card-footer -->
+    </div><!-- card -->
+  </div>
+
+</div>
+
+<div class="row row-xs my-2">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mg-b-0">Gestiones en la Cartera</h6>
+      </div><!-- card-header -->
+      <div class="card-body pd-lg-25">
+        <div class="chart-seven"><canvas id="gestiones2"></canvas></div>
+      </div><!-- card-body -->
+    </div><!-- card -->
+  </div>
+
+</div>
+
+<div class="row row-xs my-2">
+
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mg-b-0">Gestiones en la Cartera</h6>
+      </div><!-- card-header -->
+      <div class="card-body pd-lg-25">
+        <div class="chart-seven"><canvas id="gestiones3"></canvas></div>
+      </div><!-- card-body -->
     </div><!-- card -->
   </div>
 
@@ -185,7 +204,7 @@
     
     <div class="card border-primary">
       <div class="card-header">
-        <h4>Análisis de las Promesas de Pago del Ultimo Mes</h4>
+        <h4>Análisis de las Promesas de Pago del <small> <?= $startDate . ' al '. $endDate ?> </small></h4>
       </div>
       <div class="card-body">
         
@@ -222,12 +241,12 @@
             <thead>
               <!-- telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR -->
               <th>Nombre</th>
-              <th>Telefono</th>
-              <th>Proxima Fecha</th>
-              <th>Fecha</th>
+              <th>Teléfono</th>
+              <th>Fecha <abbr title="Promesa de Pago">P.P.</abbr> </th>
+              <th>Fecha <abbr title="Proximo">P.</abbr> Contacto</th>
               <th>Folio</th>
-              <th>C.R.</th>
-              <th>Cumplio</th>
+              <!-- <th>C.R.</th> -->
+              <th>Cumplio?</th>
               <th>Días</th>
             </thead>
           </table>
@@ -246,7 +265,7 @@
     <div class="card">
       <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
         <div>
-          <h6 class="mg-b-5"> Top 10 Códigos de Acción en las Bitacoras </h6>
+          <h6 class="mg-b-5"> Top Ten Códigos de Acción</h6>
         </div>
       </div><!-- card-header -->
       <div class="card-body pd-lg-25">
@@ -364,24 +383,29 @@ window.addEventListener('DOMContentLoaded', function(){
   });
 
   //canvas de promesas de pago y pagos ejecutados
+  
+  var fechasLabel = JSON.parse('<?= json_encode($fechasLabel) ?>');
+  var dataChartPago = JSON.parse('<?= json_encode($dataChartPago) ?>');
+  var dataChartPromesa = JSON.parse('<?= json_encode($dataChartPromesa) ?>');
+  
   var pp_pe = $$("#gestiones");
   var chart_pp_pe = new Chart(pp_pe, {
     type: 'line',
     data: {
-      labels: JSON.parse('<?= json_encode($fechasLabel) ?>'),
+      labels: fechasLabel,
       datasets: [
         {
           label: "Pago Ejecutado",
-          data: JSON.parse('<?= json_encode($dataChartPago) ?>'),
-          lineTension: 0,
-          fill: false,
+          data: dataChartPago,
+          lineTension: 0.3,
+          // fill: false,
           borderColor: 'green'
         },
         {
           label: "Promesas De Pago",
-          data: JSON.parse('<?= json_encode($dataChartPromesa) ?>'),
-          lineTension: 0,
-          fill: false,
+          data: dataChartPromesa,
+          lineTension: 0.3,
+          // fill: false,
           borderColor: 'blue'
         }
       ]
@@ -397,6 +421,84 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
   });
+
+  var pp_pe2 = $$("#gestiones2");
+  var chart_pp_pe2 = new Chart(pp_pe2, {
+    type: 'bar',
+    data: {
+      labels: fechasLabel,
+      datasets: [
+        {
+          label: "Pago Ejecutado",
+          data: dataChartPago,
+          // lineTension: 0,
+          // fill: false,
+          // borderColor: 'green'
+          backgroundColor: 'rgba(0, 200, 0, 0.6)',
+        },
+        {
+          label: "Promesas De Pago",
+          backgroundColor: ['green', 'blue'],
+          data: dataChartPromesa,
+          backgroundColor: 'rgba(0, 0, 200, 0.6)',
+          // lineTension: 0,
+          // fill: false,
+          // borderColor: 'blue'
+        }
+      ]
+    },
+    options: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          boxWidth: 80,
+          fontColor: 'black'
+        }
+      }
+    }
+  });
+
+  var pp_pe3 = $$("#gestiones3");
+  var chart_pp_pe3 = new Chart(pp_pe3, {
+    type: 'bar',
+    data: {
+      labels: fechasLabel,
+      datasets: [
+        {
+          label: "Pago Ejecutado",
+          data: dataChartPago,
+          backgroundColor: 'rgba(0, 200, 0, 0.6)',
+        },
+        {
+          label: "Promesas De Pago",
+          backgroundColor: ['green', 'blue'],
+          data: dataChartPromesa,
+          backgroundColor: 'rgba(0, 0, 200, 0.6)',
+        }
+      ]
+    },
+    options: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          boxWidth: 80,
+          fontColor: 'black'
+        }
+      },
+      scales: {
+        xAxes: [{
+          stacked: true
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    }
+  });
+
+ 
 
 
   /** PIE CHART de gESTIONES DE LA CARTERA **/
@@ -453,10 +555,10 @@ window.addEventListener('DOMContentLoaded', function(){
     //telContactBitaGes, fechaProxContactBitaGes, fechaBitaGes, folio, idCR
       {data: 'name', defaultContent: 'unknown', orderable: false},
       {data: 'telContactBitaGes', defaultContent: ''},
-      {data: 'fechaProxContactBitaGes', defaultContent: ''},
       {data: 'fechaBitaGes', defaultContent: ''},
+      {data: 'fechaProxContactBitaGes', defaultContent: ''},
       {data: 'folio', defaultContent: ''},
-      {data: 'idCR', defaultContent: ''},
+      // {data: 'idCR', defaultContent: ''},
       {data: (row, data)=> Number(row.cumplio) > 0 ? 'Si' : 'No'
       },
       {

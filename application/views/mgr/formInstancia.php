@@ -49,6 +49,13 @@
 
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
+                <label>Pública</label>
+                <input type="text" class="form-control" name="public" placeholder="Dominio o IP pública" value="<?= set_value('public', $host->public_ip ?? '') ?>" maxlength="20" minlength="7" />
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
                 <label>Usuario *</label>
                 <input type="text" class="form-control" name="user" placeholder="usuario de la conexión" value="<?= set_value('user', $host->user ?? '') ?>" maxlength="40" minlength="4" required />
               </div>
@@ -57,7 +64,7 @@
             <div class="col-sm-6 col-md-4">
               <div class="form-group">
                 <label>Contraseña *</label>
-                <input type="password" class="form-control" name="pass" placeholder="Contraseña del usuario para la conexión" value="" maxlength="150" />
+                <input type="password" class="form-control" name="pass" placeholder="Contraseña del usuario para la conexión" value="<?= set_value('user', $host->password ?? '') ?>" maxlength="150" />
               </div>
             </div>
 

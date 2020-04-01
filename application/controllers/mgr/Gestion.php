@@ -436,6 +436,7 @@ class Gestion extends CI_Controller {
         'password'=> $this->input->post('pass', TRUE),
         'descripcion'=> $this->input->post('des', TRUE),
         'user'=> $this->input->post('user', TRUE),
+        'public_ip'=> $this->input->post('public', TRUE),
       ];
 
       if( $this->dbhost->update( $id, $datos ) !== FALSE ){//si se almaceno correctamente
@@ -510,6 +511,7 @@ class Gestion extends CI_Controller {
         'password'=> $this->input->post('pass', TRUE),
         'descripcion'=> $this->input->post('des', TRUE),
         'user'=> $this->input->post('user', TRUE),
+        'public_ip'=> $this->input->post('public', TRUE),
       ];
 
       if( ( $insert_id = $this->dbhost->create( $datos ) ) !== FALSE ){//si se almaceno correctamente, me regresa el id

@@ -25,6 +25,7 @@
               <tr>
                 <th>Nombre</th>
                 <th>Hostname</th>
+                <th>Pública</th>
                 <th>Usuario</th>
                 <th>Base de Datos</th>
                 <th>Acciones</th>
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function(){
     columns: [
       {data: 'nombre', defaultContent: ''},
       {data: 'host', defaultContent: ''},
+      {data: 'public_ip', defaultContent: ''},
       {data: 'user', defaultContent: ''},
       {data: 'database', defaultContent: ''},
       {

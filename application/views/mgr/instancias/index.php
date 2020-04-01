@@ -162,6 +162,8 @@ window.addEventListener('DOMContentLoaded', function(){
     createdRow: (row, data, dataIndex)=>{
       if( data.statusCliente == 0 )
         row.classList.add('table-danger');
+      else if( data.statusCliente == 1 )
+        row.classList.add('table-success');
     },
     columns: [
       {data: 'nombreCliente', defaultContent: ''},

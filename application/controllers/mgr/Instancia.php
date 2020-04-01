@@ -223,6 +223,8 @@ class Instancia extends CI_Controller {
         'totalBitacoras'=> $totalBitacoras,
         'pp_tomorrow'=> $pp_tomorrow,
         'pp_cumplidas'=> $pp_cumplidas,
+        'startDate'=> $initDate,
+        'endDate'=> date('Y-m-d'),
       ], TRUE);
       
       ///////////////////
