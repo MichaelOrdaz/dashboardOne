@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', function(){
     language: {
       url: _uri+'public/assets/Spanish.json'
     },
-    data: JSON.parse('<?= $clientes["clientes"] ?>'),
+    data: JSON.parse('<?= json_encode($clientes["clientes"]) ?>'),
     createdRow: (row, data, dataIndex)=>{
       if( data.statusCliente == 0 )
         row.classList.add('table-danger');

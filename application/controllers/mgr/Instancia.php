@@ -67,6 +67,9 @@ class Instancia extends CI_Controller {
       $gestiones['activeGestion'] = $this->dbhost->getCount('AsignacionCobranza', ['statusCuenta'=>1]);
       $gestiones['totalGestion'] = $this->dbhost->getCount('AsignacionCobranza');
 
+      //aqui se me ocurre guardar los clientes de cada instancia.
+      
+
       ////////////////////////////////////////
       //contar promesas de pago y cumplidas //
       ////////////////////////////////////////
@@ -82,7 +85,16 @@ class Instancia extends CI_Controller {
       //listar a los clientes
       // $queryClients = $this->dbhost->consultar('Cliente', NULL, 'idCliente, rfcCliente, cpCliente, nombreCliente, telefonoCliente, tipo, statusCliente');
       $queryClients = $this->dbhost->getClientesConAsignacion();
-      $clientes['clientes'] = json_encode( $queryClients );
+      $clientes['clientes'] = $queryClients;
+
+      $clientesActivos = [];
+      foreach ($queryClients as $item) {
+        if( $item->statusCliente == '1' )
+          $clientesActivos[] = $item->nombreCliente;
+      }
+
+      //guardar los clientes de la instancia
+      $this->dbhost->saveClientes( $id, implode(', ', $clientesActivos) );
 
       $content = $this->load->view('mgr/instancias/index.php' , [
         'host'=> $this->dbhost->host,

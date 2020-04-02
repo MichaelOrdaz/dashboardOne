@@ -231,6 +231,12 @@ class InstanciaModel extends CI_Model{
 
   }
 
+  public function saveClientes( int $id, string $clientes ){
+    return $this->db->set(['descripcion'=> $clientes])
+    ->where('id', $id)
+    ->update('instancias');
+  }
+
 
 
   public function obtenerCodigo( $codigo, $cliente ){

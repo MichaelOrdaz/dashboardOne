@@ -63,7 +63,7 @@
                 // $segmentIp = explode('.', $instancia->host);
                   // <a href='".base_url('mgr/instancia/index/'. end( $segmentIp ) )."' > {$instancia->host} </a>
                 echo "<li>
-                  <a href='".base_url('mgr/instancia/index/'.$instancia->id)."' > {$instancia->host} </a>
+                  <a href='".base_url('mgr/instancia/index/'.$instancia->id)."' title='{$instancia->descripcion}' data-toggle='tooltip' > {$instancia->host} </a>
                 </li>";
                 
               }
