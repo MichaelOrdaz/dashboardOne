@@ -77,7 +77,7 @@ class Login extends CI_Controller {
 
     $info;
 
-    if( $user !== FALSE ){
+    if( $customUser !== FALSE ){
 
       $user = new User($customUser);
       
