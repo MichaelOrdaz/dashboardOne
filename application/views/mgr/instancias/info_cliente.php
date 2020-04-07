@@ -31,16 +31,16 @@
       <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total de Gestiones Activas</h6>
       <div class="d-flex d-lg-block d-xl-flex align-items-center">
         <i class="fas fa-clipboard-check fa-lg"></i>
-        <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= number_format($gestiones['activeGestion'], 0, '', ' ') ?> </h3>
+        <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 ml-2"> <?= number_format($gestiones['activeGestion'], 0, '', ',') ?> </h3>
       </div>
     </div>
   </div><!-- col -->
   <div class="col-md">
     <div class="card card-body">
-      <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"> <abbr title="Promesa">P.</abbr> Pago / <abbr title="Pago">P.</abbr> Ejecutado <small> <?= $startDate . '::' . $endDate ?> </small> </h6>
+      <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"> Promesa de Pago / Pago Ejecutado <br> <span class="startDate"> </span> - <span class="endDate"> </h6>
       <div class="d-flex d-lg-block d-xl-flex align-items-center">
         <i class="fas fa-comments-dollar fa-lg"></i>
-        <h3 class="tx-normal tx-rubik mg-b-0 ml-2 lh-1"> <span id="promesas"> <?= $promesas ?> </span> / <span id="cumplidos"> <?= $pagos ?> </span> </h3>
+        <h3 class="tx-normal tx-rubik mg-b-0 ml-2 lh-1"> <span id="promesas" class="text-success"> <?= $promesas ?> </span> / <span id="cumplidos" class="text-danger"> <?= $pagos ?> </span> </h3>
       </div>
     </div>
   </div>
@@ -92,7 +92,7 @@
     <div class="card">
       <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
         <div>
-          <h6 class="mg-b-5"> Top Ten Códigos de Resultado </h6>
+          <h6 class="mg-b-5"> Top 10 Códigos de Resultado </h6>
         </div>
       </div><!-- card-header -->
       <div class="card-body pd-lg-25">
@@ -115,10 +115,12 @@
   <div class="col">
     
     <div class="card">
-      <div class="card-header">Gestiones de Códigos de Resultado</div>
+      <div class="card-header">
+        <h4>
+          Número de Gestiones: <?= number_format($totalBitacoras, 0, '', ',') ?> </div>
+        </h4>
       <div class="card-body">
-        
-        <p class="text-muted"> De las <?= number_format($totalBitacoras, 0, '', ' ') ?> Bitacoras, los Códigos de Resultados son </p>        
+        <p class="text-muted">Gestiones por código de resultado</p>
         <div class="row">
           
           <?php 
@@ -168,20 +170,21 @@
 
 </div>
 
+<!-- 
 <div class="row row-xs my-2">
 
   <div class="col">
     <div class="card">
       <div class="card-header">
         <h6 class="mg-b-0">Gestiones en la Cartera</h6>
-      </div><!-- card-header -->
+      </div>
       <div class="card-body pd-lg-25">
         <div class="chart-seven"><canvas id="gestiones2"></canvas></div>
-      </div><!-- card-body -->
-    </div><!-- card -->
+      </div>
+    </div>
   </div>
 
-</div>
+</div> -->
 
 <div class="row row-xs my-2">
 
@@ -204,14 +207,15 @@
     
     <div class="card border-primary">
       <div class="card-header">
-        <h4>Análisis de las Promesas de Pago del <small> <?= $startDate . ' al '. $endDate ?> </small></h4>
+        <h4>Análisis de Promesas de Pago del periodo <span class="startDate"> </span> al <span class="endDate"> </span>
+        </h4>
       </div>
       <div class="card-body">
         
         <div class="row mb-3">
         
           <div class="col-sm border py-2">            
-            <h6 class="text-muted"> Promesas de Pago Mañana </h6>
+            <h6 class="text-muted"> Promesas de Pago Previstas para Mañana <span id="tomorrow"> </span> </h6>
             <div class="d-flex d-lg-block d-xl-flex align-items-center">
               <i class="fas fa-hand-holding-usd fa-lg"></i>
               <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 text-success ml-2"> <?= $pp_tomorrow ?> </h3>
@@ -219,7 +223,7 @@
           </div>
 
           <div class="col-sm border py-2">            
-            <h6 class="text-muted"> <abbr title="Promesas de Pago">P.P.</abbr> Cumplidas el Día Prometido </h6>
+            <h6 class="text-muted"> Promesas de Pago Cumplidas </h6>
             <div class="d-flex d-lg-block d-xl-flex align-items-center">
               <i class="fas fa-hand-holding-usd fa-lg"></i>
               <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 text-success ml-2"> <?= $pp_cumplidas ?> </h3>
@@ -265,7 +269,7 @@
     <div class="card">
       <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
         <div>
-          <h6 class="mg-b-5"> Top Ten Códigos de Acción</h6>
+          <h6 class="mg-b-5"> Top 10 Códigos de Acción</h6>
         </div>
       </div><!-- card-header -->
       <div class="card-body pd-lg-25">
@@ -289,10 +293,10 @@
   <div class="col">
     
     <div class="card">
-      <div class="card-header">Gestiones de Códigos de Acción</div>
+      <div class="card-header">Número de Gestiones <?= number_format($totalBitacoras, 0, '', ',') ?> </div>
       <div class="card-body">
         
-        <p class="text-muted"> De las <?= number_format($totalBitacoras, 0, '', ' ') ?> Bitacoras, los Códigos de Acción son </p>        
+        <p class="text-muted"> Gestiones por código de acción</p>        
         <div class="row">
           
           <?php 
@@ -346,6 +350,16 @@ window.addEventListener('DOMContentLoaded', function(){
     // for( var init = moment().subtract(1, 'M') )
   // }
   // 
+  // 
+  
+  var startDate = moment('<?= $startDate ?>').format('DD MMMM'); 
+  var endDate = moment('<?= $endDate ?>').format('DD MMMM'); 
+  var tomorrow = moment().add(1, 'days').format('DD [de] MMMM');
+
+  $('.startDate').text(startDate);
+  $('.endDate').text(endDate);
+  $('#tomorrow').text(tomorrow);
+
   var codigos_a = JSON.parse('<?= json_encode($codigos_a, JSON_HEX_QUOT|JSON_HEX_APOS) ?>');
   var codigos_r = JSON.parse('<?= json_encode($codigos_r, JSON_HEX_QUOT|JSON_HEX_APOS) ?>');
 
@@ -422,6 +436,7 @@ window.addEventListener('DOMContentLoaded', function(){
     }
   });
 
+  /*
   var pp_pe2 = $$("#gestiones2");
   var chart_pp_pe2 = new Chart(pp_pe2, {
     type: 'bar',
@@ -458,6 +473,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
   });
+  */
 
   var pp_pe3 = $$("#gestiones3");
   var chart_pp_pe3 = new Chart(pp_pe3, {
