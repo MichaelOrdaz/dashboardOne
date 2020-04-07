@@ -1,6 +1,7 @@
 <aside class="aside aside-fixed">
   <div class="aside-header">
-    <a href="<?= current_url() ?>" class="aside-logo">Legal<span>Solutions</span></a>
+    <!-- <a href="<?= current_url() ?>" class="aside-logo"> Legal<span>Solutions</span></a> -->
+    <a href="<?= current_url() ?>" class="aside-logo"> <img src="<?= base_url('public/images/logo2.png') ?>" alt="Logo" class="img-fluid img-rounded"> </span></a>
     <a href="" class="aside-menu-link">
       <i data-feather="menu"></i>
       <i data-feather="x"></i>
